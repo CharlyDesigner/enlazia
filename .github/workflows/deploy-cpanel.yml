@@ -145,3 +145,8 @@ jobs:
           $SSH "$SSH_USER@$SSH_HOST" "ls -la ~/logs 2>&1"
           echo "--- direct node invocation (5s timeout, own stdout/stderr only) ---"
           $SSH "$SSH_USER@$SSH_HOST" "cd '$APP_PATH' && timeout 5 /home/\$(whoami)/nodevenv/enlazia/24/bin/node app.cjs 2>&1 | head -c 3000"
+          echo "--- any OTHER startup-like files in APP_PATH root? ---"
+          $SSH "$SSH_USER@$SSH_HOST" "cd '$APP_PATH' && ls -la *.js *.cjs *.mjs 2>&1"
+          echo "--- CloudLinux's own registered config for this app (structure only) ---"
+          $SSH "$SSH_USER@$SSH_HOST" "find ~/.cl.selector -iname '*node*' -o -iname '*enlazia*' 2>&1"
+          $SSH "$SSH_USER@$SSH_HOST" "find ~/.cl.selector -type f 2>&1 | xargs -I{} sh -c \"echo ==={}===; python3 -c \\\"import json,sys; d=json.load(open('{}')); print(json.dumps({k:v for k,v in d.items() if k!='env_vars'}, indent=2))\\\" 2>&1 || cat {}\" 2>&1 | grep -v -i 'setenv\\|master_key\\|password' | head -c 3000"
