@@ -129,6 +129,36 @@ footer a{color:var(--muted); text-decoration:none}
 footer a:hover{color:var(--text)}
 
 .badge-license{display:inline-block; border:1px solid var(--border2); border-radius:6px; padding:2px 8px; font-size:12px; font-family:"JetBrains Mono",monospace}
+
+.reveal{opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease}
+.reveal.is-visible{opacity:1; transform:none}
+
+@media (prefers-reduced-motion: no-preference){
+  .mascot{animation:float 5s ease-in-out infinite}
+}
+@keyframes float{
+  0%,100%{transform:translateY(0) rotate(0deg)}
+  50%{transform:translateY(-10px) rotate(-2deg)}
+}
+
+.fab-github{
+  position:fixed; right:20px; bottom:20px; z-index:30;
+  display:inline-flex; align-items:center; gap:8px; padding:12px 18px; border-radius:999px;
+  background:var(--accent); color:#04140A; text-decoration:none; font-weight:600; font-size:14px;
+  box-shadow:0 8px 24px rgba(34,197,94,.35); border:1px solid rgba(255,255,255,.15);
+  opacity:0; transform:translateY(12px) scale(.95); pointer-events:none;
+  transition:opacity .3s ease, transform .3s ease, background .15s ease;
+}
+.fab-github.is-shown{opacity:1; transform:none; pointer-events:auto}
+.fab-github:hover{background:#2fdc70}
+.fab-github svg{width:18px; height:18px}
+@media (max-width:640px){.fab-github span{display:none}.fab-github{padding:12px}}
+
+.typecursor{display:inline-block; width:8px; height:1em; background:var(--accent); vertical-align:-2px; margin-left:2px}
+@media (prefers-reduced-motion: no-preference){
+  .typecursor{animation:blink 1s step-end infinite}
+}
+@keyframes blink{50%{opacity:0}}
 </style>
 </head>
 <body>
@@ -172,9 +202,8 @@ footer a:hover{color:var(--text)}
         <a class="btn btn-ghost" href="#quickstart" data-i18n="en">Quick start</a>
       </div>
       <p class="status-note">
-        <span class="dot"></span>
-        <span data-i18n="es">El demo público en enlazia.carlosnavarro.site está temporalmente fuera de línea (problema de hosting en curso). El proyecto funciona perfectamente en local o autoalojado — ver instalación abajo.</span>
-        <span data-i18n="en">The public demo at enlazia.carlosnavarro.site is temporarily offline (ongoing hosting issue). The project works fine locally or self-hosted — see install steps below.</span>
+        <span data-i18n="es">Este sitio es informativo: no corre la app en vivo. Instálala en minutos en tu propia máquina o servidor — mira cómo abajo.</span>
+        <span data-i18n="en">This site is informational only: it doesn't run the live app. Install it in minutes on your own machine or server — see how below.</span>
       </p>
     </div>
   </section>
@@ -320,7 +349,7 @@ git clone https://github.com/CharlyDesigner/enlazia.git
 <span class="c"># <span data-i18n="es">instala y arranca en modo desarrollo</span><span data-i18n="en">install and start in dev mode</span></span>
 pnpm install
 cp .env.example .env
-pnpm dev</code></pre>
+pnpm dev<span class="typecursor"></span></code></pre>
       <p class="section-sub" style="margin-top:18px" data-i18n="es">Abre <code class="mono">http://localhost:5173</code>. La API corre en <code class="mono">:8787</code> y el frontend le hace proxy a <code class="mono">/api</code>.</p>
       <p class="section-sub" style="margin-top:18px" data-i18n="en">Open <code class="mono">http://localhost:5173</code>. The API runs on <code class="mono">:8787</code> and the frontend proxies <code class="mono">/api</code> to it.</p>
 
@@ -394,6 +423,12 @@ pnpm start</code></pre>
   </section>
 </main>
 
+<a class="fab-github" id="fabGithub" href="https://github.com/CharlyDesigner/enlazia">
+  <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8 8 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+  <span data-i18n="es">Ver el repo</span>
+  <span data-i18n="en">View the repo</span>
+</a>
+
 <footer>
   <div class="wrap">
     <span>© 2026 <a href="https://carlosnavarro.site">Charly Designer</a> · <span class="badge-license">Apache-2.0</span></span>
@@ -425,6 +460,32 @@ pnpm start</code></pre>
     btn.addEventListener('click', function(){ apply(btn.getAttribute('data-set-lang')); });
   });
   apply(lang);
+})();
+
+(function(){
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (!reduceMotion && 'IntersectionObserver' in window){
+    var targets = document.querySelectorAll('section:not(.hero) > .wrap, .card');
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting){
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+    targets.forEach(function(el){ el.classList.add('reveal'); io.observe(el); });
+  }
+
+  var fab = document.getElementById('fabGithub');
+  if (fab){
+    var toggleFab = function(){
+      fab.classList.toggle('is-shown', window.scrollY > 400);
+    };
+    window.addEventListener('scroll', toggleFab, { passive: true });
+    toggleFab();
+  }
 })();
 </script>
 </body>
