@@ -132,3 +132,16 @@ jobs:
           $SSH "$SSH_USER@$SSH_HOST" "find ~/nodevenv/enlazia -maxdepth 3 2>&1"
           echo "--- CloudLinux selector's own record for this app (config only) ---"
           $SSH "$SSH_USER@$SSH_HOST" "cloudlinux-selector list --json --interpreter nodejs 2>&1 | head -c 2000"
+
+      - name: Try running the app directly to see startup errors
+        env:
+          SSH_HOST: ${{ secrets.CPANEL_HOST }}
+          SSH_USER: ${{ secrets.CPANEL_USER }}
+          SSH_PORT: ${{ secrets.CPANEL_SSH_PORT || '22' }}
+          APP_PATH: ${{ secrets.CPANEL_APP_PATH }}
+        run: |
+          SSH="ssh -i ~/.ssh/deploy_key -p $SSH_PORT"
+          echo "--- ~/logs directory (filenames only) ---"
+          $SSH "$SSH_USER@$SSH_HOST" "ls -la ~/logs 2>&1"
+          echo "--- direct node invocation (5s timeout, own stdout/stderr only) ---"
+          $SSH "$SSH_USER@$SSH_HOST" "cd '$APP_PATH' && timeout 5 /home/\$(whoami)/nodevenv/enlazia/24/bin/node app.cjs 2>&1 | head -c 3000"
