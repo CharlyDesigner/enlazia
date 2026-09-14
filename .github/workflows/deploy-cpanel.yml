@@ -85,14 +85,3 @@ jobs:
             --exclude 'node_modules' --exclude '*.log' \
             -e "$SSH" release/ "$SSH_USER@$SSH_HOST:$APP_PATH/"
           $SSH "$SSH_USER@$SSH_HOST" "mkdir -p '$APP_PATH/tmp' && touch '$APP_PATH/tmp/restart.txt'"
-
-      - name: Remove leftover public_html/enlazia.carlosnavarro.site from the first broken attempt
-        env:
-          SSH_HOST: ${{ secrets.CPANEL_HOST }}
-          SSH_USER: ${{ secrets.CPANEL_USER }}
-          SSH_PORT: ${{ secrets.CPANEL_SSH_PORT || '22' }}
-        run: |
-          SSH="ssh -i ~/.ssh/deploy_key -p $SSH_PORT"
-          $SSH "$SSH_USER@$SSH_HOST" "rm -rf ~/public_html/enlazia.carlosnavarro.site"
-          echo "--- public_html contents after cleanup ---"
-          $SSH "$SSH_USER@$SSH_HOST" "ls -la ~/public_html"
