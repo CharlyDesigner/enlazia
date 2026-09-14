@@ -78,7 +78,7 @@ jobs:
         run: |
           SSH="ssh -i ~/.ssh/deploy_key -p $SSH_PORT"
           echo "--- real subdomain document root (per cPanel, authoritative) ---"
-          DOCROOT=$($SSH "$SSH_USER@$SSH_HOST" "uapi DomainInfo domains_data 2>&1 | grep -A1 'domain: enlazia' | grep documentroot | awk '{print \$2}'")
+          DOCROOT=$($SSH "$SSH_USER@$SSH_HOST" "uapi DomainInfo domains_data 2>&1 | grep 'documentroot:.*enlazia\.carlosnavarro\.site' | awk '{print \$2}'")
           echo "docroot=$DOCROOT"
           echo "--- Passenger config lines only (SetEnv lines are deliberately excluded) ---"
           $SSH "$SSH_USER@$SSH_HOST" "grep -h '^Passenger' '$DOCROOT/.htaccess' 2>&1 || echo '(no .htaccess or no Passenger lines there)'"
