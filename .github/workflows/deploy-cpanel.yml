@@ -69,6 +69,23 @@ jobs:
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -p "$SSH_PORT" -H "$SSH_HOST" >> ~/.ssh/known_hosts
 
+      - name: Diagnose document root
+        env:
+          SSH_HOST: ${{ secrets.CPANEL_HOST }}
+          SSH_USER: ${{ secrets.CPANEL_USER }}
+          SSH_PORT: ${{ secrets.CPANEL_SSH_PORT || '22' }}
+          APP_PATH: ${{ secrets.CPANEL_APP_PATH }}
+        run: |
+          SSH="ssh -i ~/.ssh/deploy_key -p $SSH_PORT"
+          echo "--- HOME contents ---"
+          $SSH "$SSH_USER@$SSH_HOST" "ls -la ~"
+          echo "--- APP_PATH ($APP_PATH) ---"
+          $SSH "$SSH_USER@$SSH_HOST" "ls -la '$APP_PATH' 2>&1"
+          echo "--- likely subdomain doc roots ---"
+          $SSH "$SSH_USER@$SSH_HOST" "ls -la ~/enlazia.carlosnavarro.site 2>&1; ls -la ~/public_html/enlazia.carlosnavarro.site 2>&1; ls -la ~/public_html/enlazia 2>&1"
+          echo "--- userdata vhost config (Apache doc root truth) ---"
+          $SSH "$SSH_USER@$SSH_HOST" "grep -ril enlazia /etc/apache2/conf.d/userdata/ssl/2_4/*/*/ 2>&1 | head -5; grep -ril enlazia /etc/apache2/conf.d/userdata/std/2_4/*/*/ 2>&1 | head -5"
+
       - name: Upload and restart
         env:
           SSH_HOST: ${{ secrets.CPANEL_HOST }}
