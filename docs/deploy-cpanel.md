@@ -116,7 +116,7 @@ Con FileZilla, WinSCP o similar, conéctate con tu usuario de cPanel y copia las
 
 ### Opción B: Git
 
-Si tu hosting tiene **cPanel > Git Version Control**, puedes clonar el repositorio. Ten en cuenta que las carpetas `dist/` y `schemas/` no están en git: tendrías que compilar en el servidor (lo que requiere pnpm y `node_modules`) o subirlas por SFTP. Para hosting compartido, las opciones A o C suelen ser más simples.
+Si tu hosting tiene **cPanel > Git Version Control**, puedes clonar el repositorio. Ten en cuenta que las carpetas `dist/` no están en git: tendrías que compilar en el servidor (lo que requiere pnpm y `node_modules`) o subirlas por SFTP. Para hosting compartido, las opciones A o C suelen ser más simples.
 
 ### Opción C: GitHub Actions (SSH + rsync)
 
@@ -125,8 +125,10 @@ El repositorio incluye el workflow `.github/workflows/deploy-cpanel.yml`, que co
 **1. Crea un par de llaves SSH solo para el despliegue** (en tu equipo):
 
 ```bash
-ssh-keygen -t ed25519 -C "enlazia-deploy" -f enlazia-deploy
+ssh-keygen -t rsa -b 4096 -C "enlazia-deploy" -f enlazia-deploy -N ""
 ```
+
+Usamos RSA de 4096 bits porque todas las versiones de cPanel lo aceptan al importar. La llave queda sin frase de acceso (`-N ""`), porque GitHub Actions no puede escribirla.
 
 Esto crea `enlazia-deploy` (privada) y `enlazia-deploy.pub` (pública).
 
@@ -146,7 +148,7 @@ Si no ves "SSH Access", pide a tu proveedor que habilite el acceso SSH en tu cue
 | `CPANEL_USER` | Usuario de cPanel | `usuario` |
 | `CPANEL_SSH_KEY` | Contenido **completo** de la llave privada `enlazia-deploy` (incluyendo las líneas `BEGIN` y `END`) | |
 | `CPANEL_APP_PATH` | Ruta absoluta de la raíz de la app | `/home/usuario/enlazia` |
-| `CPANEL_SSH_PORT` | Puerto SSH (opcional, por defecto 22) | `2222` |
+| `CPANEL_SSH_PORT` | Puerto SSH (opcional, por defecto 22). En hosting compartido y reseller de InMotion es **2222** | `2222` |
 
 Después de guardarla en GitHub, borra la llave privada de tu equipo o guárdala en un lugar seguro.
 
