@@ -66,6 +66,11 @@ En **cPanel > Setup Node.js App > Create Application**:
 
 No pulses **Run NPM Install**: no hace falta.
 
+> [!WARNING]
+> El campo **Application URL** suele mostrarse como un menú desplegable de dominio más un campo de texto para la ruta. Si el subdominio `enlazia.tudominio.com` ya existe (creado en el paso 2), **selecciónalo directamente en el menú desplegable** y deja el campo de ruta vacío. Si en cambio dejas el menú en tu dominio raíz (`tudominio.com`) y escribes `enlazia.tudominio.com` solo como texto, cPanel crea la app como una **ruta dentro de tu dominio principal** (`tudominio.com/enlazia.tudominio.com/`) en vez de usar el subdominio real, y `https://enlazia.tudominio.com` mostrará un listado de carpeta vacío en lugar de tu app.
+>
+> Si ya te pasó esto: entra a **Setup Node.js App**, borra la aplicación mal configurada, y créala de nuevo seleccionando el subdominio en el menú desplegable.
+
 ### Variables de entorno
 
 En la misma pantalla, en **Environment variables**, agrega:

@@ -69,27 +69,6 @@ jobs:
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -p "$SSH_PORT" -H "$SSH_HOST" >> ~/.ssh/known_hosts
 
-      - name: Diagnose document root
-        env:
-          SSH_HOST: ${{ secrets.CPANEL_HOST }}
-          SSH_USER: ${{ secrets.CPANEL_USER }}
-          SSH_PORT: ${{ secrets.CPANEL_SSH_PORT || '22' }}
-          APP_PATH: ${{ secrets.CPANEL_APP_PATH }}
-        run: |
-          SSH="ssh -i ~/.ssh/deploy_key -p $SSH_PORT"
-          echo "--- HOME contents ---"
-          $SSH "$SSH_USER@$SSH_HOST" "ls -la ~"
-          echo "--- APP_PATH ($APP_PATH) ---"
-          $SSH "$SSH_USER@$SSH_HOST" "ls -la '$APP_PATH' 2>&1"
-          echo "--- likely subdomain doc roots ---"
-          $SSH "$SSH_USER@$SSH_HOST" "ls -la ~/enlazia.carlosnavarro.site 2>&1 || true; ls -la ~/public_html/enlazia.carlosnavarro.site 2>&1 || true"
-          echo "--- .htaccess under ~/enlazia.carlosnavarro.site ---"
-          $SSH "$SSH_USER@$SSH_HOST" "cat ~/enlazia.carlosnavarro.site/.htaccess 2>&1 || echo '(none)'"
-          echo "--- .htaccess under ~/public_html/enlazia.carlosnavarro.site ---"
-          $SSH "$SSH_USER@$SSH_HOST" "cat ~/public_html/enlazia.carlosnavarro.site/.htaccess 2>&1 || echo '(none)'"
-          echo "--- uapi DomainInfo (authoritative doc root per cPanel) ---"
-          $SSH "$SSH_USER@$SSH_HOST" "uapi DomainInfo domains_data 2>&1 | grep -B2 -A6 -i enlazia || true"
-
       - name: Upload and restart
         env:
           SSH_HOST: ${{ secrets.CPANEL_HOST }}
