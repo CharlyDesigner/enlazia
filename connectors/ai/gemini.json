@@ -1,0 +1,48 @@
+{
+  "$schema": "../../schemas/connector.schema.json",
+  "id": "gemini",
+  "name": "Google Gemini",
+  "category": "ai",
+  "kind": "ai-gemini",
+  "description": {
+    "es": "Modelos Gemini de Google mediante la API de Gemini (AI Studio).",
+    "en": "Google Gemini models through the Gemini API (AI Studio)."
+  },
+  "website": "https://ai.google.dev",
+  "docs": "https://ai.google.dev/gemini-api/docs",
+  "color": "#4285F4",
+  "tags": [
+    "llm",
+    "google",
+    "multimodal"
+  ],
+  "baseUrl": "https://generativelanguage.googleapis.com",
+  "auth": {
+    "type": "header",
+    "header": "x-goog-api-key",
+    "field": "apiKey"
+  },
+  "fields": [
+    {
+      "key": "apiKey",
+      "label": {
+        "es": "Clave de API",
+        "en": "API key"
+      },
+      "type": "secret",
+      "required": true,
+      "help": {
+        "es": "Créala en aistudio.google.com/apikey.",
+        "en": "Create one at aistudio.google.com/apikey."
+      }
+    }
+  ],
+  "models": {
+    "listable": true,
+    "suggested": [
+      "gemini-3.8-flash",
+      "gemini-3.1-pro-preview",
+      "gemini-3.5-flash-lite"
+    ]
+  }
+}

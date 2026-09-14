@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Typecheck, test and build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [22, 24]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm build
+      - name: Smoke test the bundled server
+        env:
+          ENLAZIA_DATA_DIR: ${{ runner.temp }}/enlazia-data
+        run: |
+          node app.cjs &
+          for i in $(seq 1 20); do
+            curl -sf http://127.0.0.1:8787/api/health && break
+            sleep 1
+          done
+          curl -sf http://127.0.0.1:8787/api/meta
+          curl -sf http://127.0.0.1:8787/ | grep -q '<div id="root">'

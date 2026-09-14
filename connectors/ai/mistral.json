@@ -1,0 +1,43 @@
+{
+  "$schema": "../../schemas/connector.schema.json",
+  "id": "mistral",
+  "name": "Mistral AI",
+  "category": "ai",
+  "kind": "ai-openai-compatible",
+  "description": {
+    "es": "Modelos de Mistral AI para chat, código y documentos.",
+    "en": "Mistral AI models for chat, code and documents."
+  },
+  "website": "https://mistral.ai",
+  "docs": "https://docs.mistral.ai",
+  "color": "#FA520F",
+  "tags": [
+    "llm",
+    "europe",
+    "open-weights"
+  ],
+  "baseUrl": "https://api.mistral.ai/v1",
+  "auth": {
+    "type": "bearer",
+    "field": "apiKey"
+  },
+  "fields": [
+    {
+      "key": "apiKey",
+      "label": {
+        "es": "Clave de API",
+        "en": "API key"
+      },
+      "type": "secret",
+      "required": true
+    }
+  ],
+  "models": {
+    "listable": true,
+    "suggested": [
+      "mistral-medium-3-5",
+      "mistral-large-3",
+      "mistral-small-4"
+    ]
+  }
+}

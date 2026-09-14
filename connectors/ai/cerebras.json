@@ -1,0 +1,42 @@
+{
+  "$schema": "../../schemas/connector.schema.json",
+  "id": "cerebras",
+  "name": "Cerebras",
+  "category": "ai",
+  "kind": "ai-openai-compatible",
+  "description": {
+    "es": "Inferencia a gran velocidad sobre hardware wafer-scale de Cerebras.",
+    "en": "High-speed inference on Cerebras wafer-scale hardware."
+  },
+  "website": "https://www.cerebras.ai",
+  "docs": "https://inference-docs.cerebras.ai",
+  "color": "#F15A29",
+  "tags": [
+    "llm",
+    "fast",
+    "open-weights"
+  ],
+  "baseUrl": "https://api.cerebras.ai/v1",
+  "auth": {
+    "type": "bearer",
+    "field": "apiKey"
+  },
+  "fields": [
+    {
+      "key": "apiKey",
+      "label": {
+        "es": "Clave de API",
+        "en": "API key"
+      },
+      "type": "secret",
+      "required": true
+    }
+  ],
+  "models": {
+    "listable": true,
+    "suggested": [
+      "gpt-oss-120b",
+      "qwen-3.8-27b"
+    ]
+  }
+}

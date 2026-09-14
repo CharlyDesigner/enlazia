@@ -1,0 +1,96 @@
+name: "Reporte de error / Bug report"
+description: "Algo no funciona como se espera / Something isn't working as expected"
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Gracias por reportar. **No incluyas API keys, contraseñas ni la llave maestra.** Para vulnerabilidades de seguridad usa https://github.com/CharlyDesigner/enlazia/security/advisories/new
+        Thanks for reporting. **Do not include API keys, passwords or the master key.** For security vulnerabilities use https://github.com/CharlyDesigner/enlazia/security/advisories/new
+
+  - type: textarea
+    id: description
+    attributes:
+      label: "Descripción / Description"
+      description: "¿Qué pasó? / What happened?"
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: "Pasos para reproducir / Steps to reproduce"
+      placeholder: |
+        1. Ir a / Go to ...
+        2. Hacer clic en / Click ...
+        3. Ver el error / See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: "Comportamiento esperado / Expected behavior"
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: "Versión de Enlazia / Enlazia version"
+      description: "Visible en Ajustes o en /api/meta / Shown in Settings or at /api/meta"
+      placeholder: "0.1.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: deployment
+    attributes:
+      label: "Forma de despliegue / Deployment"
+      options:
+        - "Local (pnpm dev)"
+        - "Local (pnpm start)"
+        - "VPS / servidor propio / own server"
+        - "cPanel (Setup Node.js App)"
+        - "Otra / Other"
+    validations:
+      required: true
+
+  - type: input
+    id: node
+    attributes:
+      label: "Versión de Node.js / Node.js version"
+      placeholder: "22.13.0"
+    validations:
+      required: true
+
+  - type: input
+    id: connector
+    attributes:
+      label: "Conector afectado / Affected connector"
+      description: "Si aplica / If applicable"
+      placeholder: "openai, github, custom-rest..."
+
+  - type: input
+    id: browser
+    attributes:
+      label: "Navegador y sistema / Browser and OS"
+      placeholder: "Chrome 140, Windows 11"
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: "Registros / Logs"
+      description: "Salida del servidor, stderr.log o consola del navegador. Revisa que no haya secretos. / Server output, stderr.log or browser console. Make sure there are no secrets."
+      render: shell
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: "Confirmación / Confirmation"
+      options:
+        - label: "Busqué issues existentes y no encontré uno igual / I searched existing issues and found no duplicate"
+          required: true
+        - label: "Quité toda información sensible / I removed all sensitive information"
+          required: true

@@ -1,0 +1,43 @@
+{
+  "$schema": "../../schemas/connector.schema.json",
+  "id": "perplexity",
+  "name": "Perplexity",
+  "category": "ai",
+  "kind": "ai-openai-compatible",
+  "description": {
+    "es": "Router de Perplexity: modelos de varios proveedores con API compatible con OpenAI.",
+    "en": "Perplexity Router: multi-provider models via an OpenAI-compatible API."
+  },
+  "website": "https://www.perplexity.ai",
+  "docs": "https://docs.perplexity.ai/docs/router/quickstart",
+  "color": "#20808D",
+  "tags": [
+    "llm",
+    "router",
+    "search"
+  ],
+  "baseUrl": "https://api.perplexity.ai/router/v1",
+  "auth": {
+    "type": "bearer",
+    "field": "apiKey"
+  },
+  "fields": [
+    {
+      "key": "apiKey",
+      "label": {
+        "es": "Clave de API",
+        "en": "API key"
+      },
+      "type": "secret",
+      "required": true
+    }
+  ],
+  "models": {
+    "listable": true,
+    "suggested": [
+      "perplexity/kimi-k3",
+      "perplexity/deepseek-v4-flash-0731",
+      "perplexity/glm-5.2"
+    ]
+  }
+}

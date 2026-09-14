@@ -1,0 +1,42 @@
+{
+  "$schema": "../../schemas/connector.schema.json",
+  "id": "zhipu",
+  "name": "Z.ai (GLM)",
+  "category": "ai",
+  "kind": "ai-openai-compatible",
+  "description": {
+    "es": "Modelos GLM de Z.ai (Zhipu), endpoint internacional.",
+    "en": "Z.ai (Zhipu) GLM models, international endpoint."
+  },
+  "website": "https://z.ai",
+  "docs": "https://docs.z.ai",
+  "color": "#2D2D2D",
+  "tags": [
+    "llm",
+    "glm",
+    "coding"
+  ],
+  "baseUrl": "https://api.z.ai/api/paas/v4",
+  "auth": {
+    "type": "bearer",
+    "field": "apiKey"
+  },
+  "fields": [
+    {
+      "key": "apiKey",
+      "label": {
+        "es": "Clave de API",
+        "en": "API key"
+      },
+      "type": "secret",
+      "required": true
+    }
+  ],
+  "models": {
+    "listable": false,
+    "suggested": [
+      "glm-5.3",
+      "glm-5.3-flash"
+    ]
+  }
+}

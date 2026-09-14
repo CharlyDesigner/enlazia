@@ -1,0 +1,393 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "ai",
+        "api"
+      ]
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "ai-openai-compatible",
+        "ai-anthropic",
+        "ai-gemini",
+        "rest"
+      ]
+    },
+    "description": {
+      "type": "object",
+      "properties": {
+        "es": {
+          "type": "string",
+          "minLength": 1
+        },
+        "en": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "es",
+        "en"
+      ]
+    },
+    "website": {
+      "type": "string",
+      "format": "uri"
+    },
+    "docs": {
+      "type": "string",
+      "format": "uri"
+    },
+    "color": {
+      "type": "string",
+      "pattern": "^#[0-9a-fA-F]{6}$"
+    },
+    "tags": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "baseUrl": {
+      "type": "string",
+      "minLength": 1
+    },
+    "auth": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "none"
+            }
+          },
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "bearer"
+            },
+            "field": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "field"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "header"
+            },
+            "header": {
+              "type": "string"
+            },
+            "headerField": {
+              "type": "string"
+            },
+            "field": {
+              "type": "string"
+            },
+            "prefix": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "field"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "query"
+            },
+            "param": {
+              "type": "string"
+            },
+            "field": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "param",
+            "field"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "basic"
+            },
+            "usernameField": {
+              "type": "string"
+            },
+            "passwordField": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "usernameField",
+            "passwordField"
+          ]
+        }
+      ]
+    },
+    "fields": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$"
+          },
+          "label": {
+            "type": "object",
+            "properties": {
+              "es": {
+                "type": "string",
+                "minLength": 1
+              },
+              "en": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "es",
+              "en"
+            ]
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "text",
+              "secret",
+              "url",
+              "select"
+            ]
+          },
+          "required": {
+            "default": true,
+            "type": "boolean"
+          },
+          "default": {
+            "type": "string"
+          },
+          "placeholder": {
+            "type": "string"
+          },
+          "help": {
+            "type": "object",
+            "properties": {
+              "es": {
+                "type": "string",
+                "minLength": 1
+              },
+              "en": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "es",
+              "en"
+            ]
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "value",
+                "label"
+              ]
+            }
+          }
+        },
+        "required": [
+          "key",
+          "label",
+          "type"
+        ]
+      }
+    },
+    "defaultHeaders": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string"
+      },
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "test": {
+      "type": "object",
+      "properties": {
+        "method": {
+          "default": "GET",
+          "type": "string",
+          "enum": [
+            "GET",
+            "POST",
+            "PUT",
+            "PATCH",
+            "DELETE"
+          ]
+        },
+        "path": {
+          "type": "string",
+          "format": "starts_with",
+          "pattern": "^\\/.*"
+        },
+        "expectStatus": {
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        }
+      },
+      "required": [
+        "path"
+      ]
+    },
+    "models": {
+      "type": "object",
+      "properties": {
+        "listable": {
+          "default": true,
+          "type": "boolean"
+        },
+        "suggested": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "actions": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]*$"
+          },
+          "name": {
+            "type": "object",
+            "properties": {
+              "es": {
+                "type": "string",
+                "minLength": 1
+              },
+              "en": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "es",
+              "en"
+            ]
+          },
+          "method": {
+            "type": "string",
+            "enum": [
+              "GET",
+              "POST",
+              "PUT",
+              "PATCH",
+              "DELETE"
+            ]
+          },
+          "path": {
+            "type": "string",
+            "format": "starts_with",
+            "pattern": "^\\/.*"
+          },
+          "description": {
+            "type": "object",
+            "properties": {
+              "es": {
+                "type": "string",
+                "minLength": 1
+              },
+              "en": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "es",
+              "en"
+            ]
+          },
+          "sampleBody": {}
+        },
+        "required": [
+          "id",
+          "name",
+          "method",
+          "path"
+        ]
+      }
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "category",
+    "kind",
+    "description",
+    "baseUrl",
+    "auth"
+  ],
+  "$id": "https://github.com/CharlyDesigner/enlazia/schemas/connector.schema.json",
+  "title": "Enlazia connector manifest"
+}

@@ -1,0 +1,22 @@
+{
+  "name": "@enlazia/server",
+  "version": "0.1.0",
+  "private": true,
+  "license": "Apache-2.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "node build.mjs",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@enlazia/shared": "workspace:*",
+    "@hono/node-server": "^2.1.1",
+    "hono": "^4.13.7",
+    "zod": "^4.6.4"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2"
+  }
+}

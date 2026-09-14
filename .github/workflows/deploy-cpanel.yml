@@ -1,0 +1,64 @@
+name: Deploy to cPanel
+
+# Builds Enlazia and uploads the runtime files to a cPanel "Setup Node.js App".
+# Required repository secrets: CPANEL_HOST, CPANEL_USER, CPANEL_SSH_KEY, CPANEL_APP_PATH
+# Optional: CPANEL_SSH_PORT (default 22). See docs/deploy-cpanel.md.
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-cpanel
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test
+      - run: pnpm build
+
+      - name: Prepare release folder
+        run: |
+          mkdir -p release/packages/server release/apps/web
+          cp app.cjs package.json LICENSE NOTICE release/
+          cp -r packages/server/dist release/packages/server/dist
+          cp -r apps/web/dist release/apps/web/dist
+          cp -r connectors schemas release/
+
+      - name: Configure SSH
+        env:
+          SSH_KEY: ${{ secrets.CPANEL_SSH_KEY }}
+          SSH_HOST: ${{ secrets.CPANEL_HOST }}
+          SSH_PORT: ${{ secrets.CPANEL_SSH_PORT || '22' }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -p "$SSH_PORT" -H "$SSH_HOST" >> ~/.ssh/known_hosts
+
+      - name: Upload and restart
+        env:
+          SSH_HOST: ${{ secrets.CPANEL_HOST }}
+          SSH_USER: ${{ secrets.CPANEL_USER }}
+          SSH_PORT: ${{ secrets.CPANEL_SSH_PORT || '22' }}
+          APP_PATH: ${{ secrets.CPANEL_APP_PATH }}
+        run: |
+          SSH="ssh -i ~/.ssh/deploy_key -p $SSH_PORT"
+          # data/ (database, master key, custom connectors) and .env live only on the server and are never touched.
+          rsync -az --delete --exclude 'data/' --exclude '.env' --exclude 'tmp/' --exclude '.htaccess' \
+            -e "$SSH" release/ "$SSH_USER@$SSH_HOST:$APP_PATH/"
+          $SSH "$SSH_USER@$SSH_HOST" "mkdir -p '$APP_PATH/tmp' && touch '$APP_PATH/tmp/restart.txt'"

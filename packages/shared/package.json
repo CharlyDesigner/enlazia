@@ -1,0 +1,19 @@
+{
+  "name": "@enlazia/shared",
+  "version": "0.1.0",
+  "private": true,
+  "license": "Apache-2.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "tsx scripts/gen-schema.ts",
+    "schema": "tsx scripts/gen-schema.ts",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "zod": "^4.6.4"
+  }
+}

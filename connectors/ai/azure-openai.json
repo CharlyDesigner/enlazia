@@ -1,0 +1,58 @@
+{
+  "$schema": "../../schemas/connector.schema.json",
+  "id": "azure-openai",
+  "name": "Azure OpenAI",
+  "category": "ai",
+  "kind": "ai-openai-compatible",
+  "description": {
+    "es": "Modelos de OpenAI desplegados en tu recurso de Azure (API v1).",
+    "en": "OpenAI models deployed in your Azure resource (v1 API)."
+  },
+  "website": "https://azure.microsoft.com/products/ai-foundry/models/openai",
+  "docs": "https://learn.microsoft.com/azure/foundry/openai/api-version-lifecycle",
+  "color": "#0078D4",
+  "tags": [
+    "llm",
+    "azure",
+    "enterprise"
+  ],
+  "baseUrl": "https://{{resourceName}}.openai.azure.com/openai/v1",
+  "auth": {
+    "type": "header",
+    "header": "api-key",
+    "field": "apiKey"
+  },
+  "fields": [
+    {
+      "key": "resourceName",
+      "label": {
+        "es": "Nombre del recurso",
+        "en": "Resource name"
+      },
+      "type": "text",
+      "required": true,
+      "placeholder": "mi-recurso",
+      "help": {
+        "es": "La parte \"NOMBRE\" de https://NOMBRE.openai.azure.com.",
+        "en": "The \"NAME\" part of https://NAME.openai.azure.com."
+      }
+    },
+    {
+      "key": "apiKey",
+      "label": {
+        "es": "Clave de API",
+        "en": "API key"
+      },
+      "type": "secret",
+      "required": true,
+      "help": {
+        "es": "En el portal de Azure: tu recurso > Claves y punto de conexión.",
+        "en": "In the Azure portal: your resource > Keys and Endpoint."
+      }
+    }
+  ],
+  "models": {
+    "listable": true,
+    "suggested": []
+  }
+}

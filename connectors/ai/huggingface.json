@@ -1,0 +1,47 @@
+{
+  "$schema": "../../schemas/connector.schema.json",
+  "id": "huggingface",
+  "name": "Hugging Face",
+  "category": "ai",
+  "kind": "ai-openai-compatible",
+  "description": {
+    "es": "Inference Providers de Hugging Face: miles de modelos con un solo token.",
+    "en": "Hugging Face Inference Providers: many models with a single token."
+  },
+  "website": "https://huggingface.co",
+  "docs": "https://huggingface.co/docs/inference-providers",
+  "color": "#FFD21E",
+  "tags": [
+    "llm",
+    "open-weights",
+    "router"
+  ],
+  "baseUrl": "https://router.huggingface.co/v1",
+  "auth": {
+    "type": "bearer",
+    "field": "apiKey"
+  },
+  "fields": [
+    {
+      "key": "apiKey",
+      "label": {
+        "es": "Token de acceso",
+        "en": "Access token"
+      },
+      "type": "secret",
+      "required": true,
+      "placeholder": "hf_...",
+      "help": {
+        "es": "Token fine-grained con permiso \"Make calls to Inference Providers\".",
+        "en": "Fine-grained token with \"Make calls to Inference Providers\" permission."
+      }
+    }
+  ],
+  "models": {
+    "listable": true,
+    "suggested": [
+      "openai/gpt-oss-120b",
+      "deepseek-ai/DeepSeek-R1"
+    ]
+  }
+}

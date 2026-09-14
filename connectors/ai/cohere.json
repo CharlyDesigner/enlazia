@@ -1,0 +1,43 @@
+{
+  "$schema": "../../schemas/connector.schema.json",
+  "id": "cohere",
+  "name": "Cohere",
+  "category": "ai",
+  "kind": "ai-openai-compatible",
+  "description": {
+    "es": "Modelos Command de Cohere mediante su API de compatibilidad con OpenAI.",
+    "en": "Cohere Command models through its OpenAI compatibility API."
+  },
+  "website": "https://cohere.com",
+  "docs": "https://docs.cohere.com/docs/compatibility-api",
+  "color": "#39594D",
+  "tags": [
+    "llm",
+    "enterprise",
+    "rag"
+  ],
+  "baseUrl": "https://api.cohere.ai/compatibility/v1",
+  "auth": {
+    "type": "bearer",
+    "field": "apiKey"
+  },
+  "fields": [
+    {
+      "key": "apiKey",
+      "label": {
+        "es": "Clave de API",
+        "en": "API key"
+      },
+      "type": "secret",
+      "required": true
+    }
+  ],
+  "models": {
+    "listable": false,
+    "suggested": [
+      "command-a-plus-05-2026",
+      "command-a-reasoning-08-2025",
+      "command-a-03-2025"
+    ]
+  }
+}

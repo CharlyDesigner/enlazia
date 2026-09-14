@@ -1,0 +1,47 @@
+{
+  "$schema": "../../schemas/connector.schema.json",
+  "id": "qwen",
+  "name": "Qwen (Alibaba Cloud)",
+  "category": "ai",
+  "kind": "ai-openai-compatible",
+  "description": {
+    "es": "Modelos Qwen vía Alibaba Cloud Model Studio (región internacional).",
+    "en": "Qwen models via Alibaba Cloud Model Studio (international region)."
+  },
+  "website": "https://www.alibabacloud.com/product/modelstudio",
+  "docs": "https://www.alibabacloud.com/help/en/model-studio/compatibility-of-openai-with-dashscope",
+  "color": "#615CED",
+  "tags": [
+    "llm",
+    "qwen",
+    "alibaba"
+  ],
+  "baseUrl": "https://dashscope-intl.aliyuncs.com/compatible-mode/v1",
+  "auth": {
+    "type": "bearer",
+    "field": "apiKey"
+  },
+  "fields": [
+    {
+      "key": "apiKey",
+      "label": {
+        "es": "Clave de API",
+        "en": "API key"
+      },
+      "type": "secret",
+      "required": true,
+      "help": {
+        "es": "Usa una clave creada en la región de Singapur.",
+        "en": "Use a key created in the Singapore region."
+      }
+    }
+  ],
+  "models": {
+    "listable": false,
+    "suggested": [
+      "qwen3.8-max",
+      "qwen3.7-plus",
+      "qwen3.8-flash"
+    ]
+  }
+}

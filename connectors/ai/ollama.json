@@ -1,0 +1,44 @@
+{
+  "$schema": "../../schemas/connector.schema.json",
+  "id": "ollama",
+  "name": "Ollama",
+  "category": "ai",
+  "kind": "ai-openai-compatible",
+  "description": {
+    "es": "Modelos locales ejecutados con Ollama en tu equipo.",
+    "en": "Local models running on your machine with Ollama."
+  },
+  "website": "https://ollama.com",
+  "docs": "https://docs.ollama.com/api/openai-compatibility",
+  "color": "#000000",
+  "tags": [
+    "llm",
+    "local",
+    "self-hosted"
+  ],
+  "baseUrl": "{{baseUrl}}",
+  "auth": {
+    "type": "none"
+  },
+  "fields": [
+    {
+      "key": "baseUrl",
+      "label": {
+        "es": "URL base",
+        "en": "Base URL"
+      },
+      "type": "url",
+      "required": true,
+      "default": "http://localhost:11434/v1",
+      "placeholder": "http://localhost:11434/v1",
+      "help": {
+        "es": "Dirección del servidor local, incluyendo /v1.",
+        "en": "Local server address, including /v1."
+      }
+    }
+  ],
+  "models": {
+    "listable": true,
+    "suggested": []
+  }
+}

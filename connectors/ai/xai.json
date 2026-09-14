@@ -1,0 +1,42 @@
+{
+  "$schema": "../../schemas/connector.schema.json",
+  "id": "xai",
+  "name": "xAI Grok",
+  "category": "ai",
+  "kind": "ai-openai-compatible",
+  "description": {
+    "es": "Modelos Grok de xAI para chat y razonamiento.",
+    "en": "xAI Grok models for chat and reasoning."
+  },
+  "website": "https://x.ai",
+  "docs": "https://docs.x.ai",
+  "color": "#000000",
+  "tags": [
+    "llm",
+    "grok",
+    "reasoning"
+  ],
+  "baseUrl": "https://api.x.ai/v1",
+  "auth": {
+    "type": "bearer",
+    "field": "apiKey"
+  },
+  "fields": [
+    {
+      "key": "apiKey",
+      "label": {
+        "es": "Clave de API",
+        "en": "API key"
+      },
+      "type": "secret",
+      "required": true
+    }
+  ],
+  "models": {
+    "listable": true,
+    "suggested": [
+      "grok-4.6",
+      "grok-4.5"
+    ]
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "$schema": "../../schemas/connector.schema.json",
+  "id": "github",
+  "name": "GitHub",
+  "category": "api",
+  "kind": "rest",
+  "description": {
+    "es": "API REST de GitHub: repositorios, usuarios y notificaciones.",
+    "en": "GitHub REST API: repositories, users and notifications."
+  },
+  "website": "https://github.com",
+  "docs": "https://docs.github.com/en/rest",
+  "color": "#181717",
+  "tags": [
+    "git",
+    "devtools",
+    "rest"
+  ],
+  "baseUrl": "https://api.github.com",
+  "auth": {
+    "type": "bearer",
+    "field": "apiKey"
+  },
+  "fields": [
+    {
+      "key": "apiKey",
+      "label": {
+        "es": "Token de acceso personal",
+        "en": "Personal access token"
+      },
+      "type": "secret",
+      "required": true,
+      "placeholder": "github_pat_...",
+      "help": {
+        "es": "Créalo en github.com/settings/tokens.",
+        "en": "Create one at github.com/settings/tokens."
+      }
+    }
+  ],
+  "defaultHeaders": {
+    "Accept": "application/vnd.github+json",
+    "X-GitHub-Api-Version": "2026-03-10"
+  },
+  "test": {
+    "method": "GET",
+    "path": "/user",
+    "expectStatus": 200
+  },
+  "actions": [
+    {
+      "id": "get-user",
+      "name": {
+        "es": "Usuario autenticado",
+        "en": "Authenticated user"
+      },
+      "method": "GET",
+      "path": "/user"
+    },
+    {
+      "id": "list-repos",
+      "name": {
+        "es": "Mis repositorios",
+        "en": "My repositories"
+      },
+      "method": "GET",
+      "path": "/user/repos?per_page=30&sort=updated"
+    },
+    {
+      "id": "list-notifications",
+      "name": {
+        "es": "Notificaciones",
+        "en": "Notifications"
+      },
+      "method": "GET",
+      "path": "/notifications"
+    }
+  ]
+}

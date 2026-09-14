@@ -1,0 +1,51 @@
+name: "Propuesta de funcionalidad / Feature request"
+description: "Sugiere una idea o mejora / Suggest an idea or improvement"
+title: "[Feature]: "
+labels: ["enhancement", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Para pedir un conector nuevo usa la plantilla "Nuevo conector". / To request a new connector, use the "New connector" template.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: "Problema / Problem"
+      description: "¿Qué necesidad o dificultad resuelve? / What need or pain point does this address?"
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: "Solución propuesta / Proposed solution"
+      description: "¿Cómo te gustaría que funcionara? / How would you like it to work?"
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: "Alternativas consideradas / Alternatives considered"
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: "Área / Area"
+      multiple: true
+      options:
+        - "Interfaz / UI"
+        - "Servidor / API"
+        - "Conectores / Connectors"
+        - "Seguridad / Security"
+        - "Despliegue / Deployment"
+        - "Documentación / Docs"
+        - "Otra / Other"
+
+  - type: checkboxes
+    id: contribute
+    attributes:
+      label: "Contribución / Contribution"
+      options:
+        - label: "Me gustaría ayudar a implementarlo / I'd like to help implement it"

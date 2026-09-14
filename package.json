@@ -1,0 +1,32 @@
+{
+  "name": "enlazia",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Open-source, bilingual (ES/EN) web platform to connect AI providers and third-party APIs.",
+  "license": "Apache-2.0",
+  "author": "Charly Designer (https://carlosnavarro.site)",
+  "homepage": "https://enlazia.carlosnavarro.site",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CharlyDesigner/enlazia.git"
+  },
+  "bugs": "https://github.com/CharlyDesigner/enlazia/issues",
+  "packageManager": "pnpm@11.12.0",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm --filter @enlazia/server --filter @enlazia/web --parallel dev",
+    "build": "pnpm -r build",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test",
+    "start": "node app.cjs"
+  },
+  "devDependencies": {
+    "@types/node": "^26.5.1",
+    "tsx": "^4.23.13",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.0"
+  }
+}

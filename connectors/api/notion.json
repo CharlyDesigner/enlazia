@@ -1,0 +1,89 @@
+{
+  "$schema": "../../schemas/connector.schema.json",
+  "id": "notion",
+  "name": "Notion",
+  "category": "api",
+  "kind": "rest",
+  "description": {
+    "es": "API de Notion: páginas, bases de datos y usuarios del espacio de trabajo.",
+    "en": "Notion API: pages, databases and workspace users."
+  },
+  "website": "https://www.notion.com",
+  "docs": "https://developers.notion.com/reference/intro",
+  "color": "#000000",
+  "tags": [
+    "docs",
+    "productivity",
+    "rest"
+  ],
+  "baseUrl": "https://api.notion.com",
+  "auth": {
+    "type": "bearer",
+    "field": "apiKey"
+  },
+  "fields": [
+    {
+      "key": "apiKey",
+      "label": {
+        "es": "Token de integración",
+        "en": "Integration token"
+      },
+      "type": "secret",
+      "required": true,
+      "placeholder": "ntn_...",
+      "help": {
+        "es": "Créalo en notion.so/profile/integrations y comparte páginas con la integración.",
+        "en": "Create it at notion.so/profile/integrations and share pages with it."
+      }
+    }
+  ],
+  "defaultHeaders": {
+    "Notion-Version": "2026-03-11"
+  },
+  "test": {
+    "method": "GET",
+    "path": "/v1/users/me",
+    "expectStatus": 200
+  },
+  "actions": [
+    {
+      "id": "get-bot-user",
+      "name": {
+        "es": "Usuario del bot",
+        "en": "Bot user"
+      },
+      "method": "GET",
+      "path": "/v1/users/me"
+    },
+    {
+      "id": "list-users",
+      "name": {
+        "es": "Listar usuarios",
+        "en": "List users"
+      },
+      "method": "GET",
+      "path": "/v1/users"
+    },
+    {
+      "id": "search",
+      "name": {
+        "es": "Buscar páginas",
+        "en": "Search pages"
+      },
+      "method": "POST",
+      "path": "/v1/search",
+      "description": {
+        "es": "Búsqueda de solo lectura en el contenido compartido.",
+        "en": "Read-only search across shared content."
+      },
+      "sampleBody": {
+        "query": "",
+        "filter": {
+          "property": "object",
+          "value": "page"
+        },
+        "page_size": 10
+      }
+    }
+  ]
+}

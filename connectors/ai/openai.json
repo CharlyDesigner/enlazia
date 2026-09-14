@@ -1,0 +1,48 @@
+{
+  "$schema": "../../schemas/connector.schema.json",
+  "id": "openai",
+  "name": "OpenAI",
+  "category": "ai",
+  "kind": "ai-openai-compatible",
+  "description": {
+    "es": "Modelos GPT de OpenAI para chat, razonamiento y código.",
+    "en": "OpenAI GPT models for chat, reasoning and code."
+  },
+  "website": "https://openai.com",
+  "docs": "https://developers.openai.com/api/docs",
+  "color": "#10A37F",
+  "tags": [
+    "llm",
+    "gpt",
+    "chat"
+  ],
+  "baseUrl": "https://api.openai.com/v1",
+  "auth": {
+    "type": "bearer",
+    "field": "apiKey"
+  },
+  "fields": [
+    {
+      "key": "apiKey",
+      "label": {
+        "es": "Clave de API",
+        "en": "API key"
+      },
+      "type": "secret",
+      "required": true,
+      "help": {
+        "es": "Créala en platform.openai.com/api-keys.",
+        "en": "Create one at platform.openai.com/api-keys."
+      }
+    }
+  ],
+  "models": {
+    "listable": true,
+    "suggested": [
+      "gpt-6-astra",
+      "gpt-5.6-sol",
+      "gpt-5.6-terra",
+      "gpt-5.6-luna"
+    ]
+  }
+}

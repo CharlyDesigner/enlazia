@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Enlazia">
+  <!-- Enchufito: Enlazia mascot, transparent background -->
+  <g fill="#F1F5F9">
+    <rect x="95" y="75" width="74" height="150" rx="37" transform="rotate(15 132 150)"/>
+    <rect x="231" y="103" width="74" height="150" rx="37" transform="rotate(20 268 178)"/>
+  </g>
+  <path fill="#22C55E" d="M0 220C35 185 70 172 110 172C160 172 230 185 294 228C330 255 345 300 345 335C345 385 325 420 292 437C305 460 311 490 310 512H0Z"/>
+  <g fill="#F1F5F9">
+    <ellipse cx="93" cy="291" rx="28" ry="33" transform="rotate(15 93 291)"/>
+    <ellipse cx="238" cy="330" rx="28" ry="33" transform="rotate(15 238 330)"/>
+  </g>
+  <path d="M143 322Q158 348 176 331" fill="none" stroke="#F1F5F9" stroke-width="13" stroke-linecap="round"/>
+</svg>

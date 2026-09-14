@@ -1,0 +1,45 @@
+{
+  "$schema": "../../schemas/connector.schema.json",
+  "id": "together",
+  "name": "Together AI",
+  "category": "ai",
+  "kind": "ai-openai-compatible",
+  "description": {
+    "es": "Inferencia serverless de modelos abiertos líderes.",
+    "en": "Serverless inference for leading open models."
+  },
+  "website": "https://www.together.ai",
+  "docs": "https://docs.together.ai",
+  "color": "#0F6FFF",
+  "tags": [
+    "llm",
+    "open-weights",
+    "serverless"
+  ],
+  "baseUrl": "https://api.together.ai/v1",
+  "auth": {
+    "type": "bearer",
+    "field": "apiKey"
+  },
+  "fields": [
+    {
+      "key": "apiKey",
+      "label": {
+        "es": "Clave de API",
+        "en": "API key"
+      },
+      "type": "secret",
+      "required": true
+    }
+  ],
+  "models": {
+    "listable": true,
+    "suggested": [
+      "deepseek-ai/DeepSeek-V4-Pro-0813",
+      "Qwen/Qwen3.7-Max",
+      "moonshotai/Kimi-K3",
+      "zai-org/GLM-5.3",
+      "openai/gpt-oss-120b"
+    ]
+  }
+}

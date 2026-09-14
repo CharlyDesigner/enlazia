@@ -1,0 +1,42 @@
+{
+  "$schema": "../../schemas/connector.schema.json",
+  "id": "deepseek",
+  "name": "DeepSeek",
+  "category": "ai",
+  "kind": "ai-openai-compatible",
+  "description": {
+    "es": "Modelos DeepSeek de alto rendimiento y bajo costo.",
+    "en": "High-performance, low-cost DeepSeek models."
+  },
+  "website": "https://www.deepseek.com",
+  "docs": "https://api-docs.deepseek.com",
+  "color": "#4D6BFE",
+  "tags": [
+    "llm",
+    "reasoning",
+    "open-weights"
+  ],
+  "baseUrl": "https://api.deepseek.com",
+  "auth": {
+    "type": "bearer",
+    "field": "apiKey"
+  },
+  "fields": [
+    {
+      "key": "apiKey",
+      "label": {
+        "es": "Clave de API",
+        "en": "API key"
+      },
+      "type": "secret",
+      "required": true
+    }
+  ],
+  "models": {
+    "listable": true,
+    "suggested": [
+      "deepseek-flash",
+      "deepseek-v4-pro"
+    ]
+  }
+}

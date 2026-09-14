@@ -1,0 +1,74 @@
+{
+  "$schema": "../../schemas/connector.schema.json",
+  "id": "stripe",
+  "name": "Stripe",
+  "category": "api",
+  "kind": "rest",
+  "description": {
+    "es": "API de Stripe: saldo, clientes y cargos de tu cuenta.",
+    "en": "Stripe API: balance, customers and charges for your account."
+  },
+  "website": "https://stripe.com",
+  "docs": "https://docs.stripe.com/api",
+  "color": "#635BFF",
+  "tags": [
+    "payments",
+    "billing",
+    "rest"
+  ],
+  "baseUrl": "https://api.stripe.com",
+  "auth": {
+    "type": "bearer",
+    "field": "apiKey"
+  },
+  "fields": [
+    {
+      "key": "apiKey",
+      "label": {
+        "es": "Clave secreta",
+        "en": "Secret key"
+      },
+      "type": "secret",
+      "required": true,
+      "placeholder": "sk_test_... / rk_live_...",
+      "help": {
+        "es": "Usa una clave de prueba o una clave restringida de solo lectura.",
+        "en": "Use a test key or a read-only restricted key."
+      }
+    }
+  ],
+  "test": {
+    "method": "GET",
+    "path": "/v1/balance",
+    "expectStatus": 200
+  },
+  "actions": [
+    {
+      "id": "get-balance",
+      "name": {
+        "es": "Saldo",
+        "en": "Balance"
+      },
+      "method": "GET",
+      "path": "/v1/balance"
+    },
+    {
+      "id": "list-customers",
+      "name": {
+        "es": "Clientes recientes",
+        "en": "Recent customers"
+      },
+      "method": "GET",
+      "path": "/v1/customers?limit=10"
+    },
+    {
+      "id": "list-charges",
+      "name": {
+        "es": "Cargos recientes",
+        "en": "Recent charges"
+      },
+      "method": "GET",
+      "path": "/v1/charges?limit=10"
+    }
+  ]
+}

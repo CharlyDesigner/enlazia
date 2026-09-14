@@ -1,0 +1,55 @@
+{
+  "$schema": "../../schemas/connector.schema.json",
+  "id": "custom-openai",
+  "name": "OpenAI-compatible (custom)",
+  "category": "ai",
+  "kind": "ai-openai-compatible",
+  "description": {
+    "es": "Cualquier servidor compatible con la API de OpenAI (vLLM, LiteLLM, etc.).",
+    "en": "Any server compatible with the OpenAI API (vLLM, LiteLLM, etc.)."
+  },
+  "color": "#6B7280",
+  "tags": [
+    "llm",
+    "custom",
+    "self-hosted"
+  ],
+  "baseUrl": "{{baseUrl}}",
+  "auth": {
+    "type": "bearer",
+    "field": "apiKey"
+  },
+  "fields": [
+    {
+      "key": "baseUrl",
+      "label": {
+        "es": "URL base",
+        "en": "Base URL"
+      },
+      "type": "url",
+      "required": true,
+      "placeholder": "https://mi-servidor.com/v1",
+      "help": {
+        "es": "Incluye el prefijo de versión, por ejemplo /v1.",
+        "en": "Include the version prefix, e.g. /v1."
+      }
+    },
+    {
+      "key": "apiKey",
+      "label": {
+        "es": "Clave de API",
+        "en": "API key"
+      },
+      "type": "secret",
+      "required": false,
+      "help": {
+        "es": "Opcional si tu servidor no requiere autenticación.",
+        "en": "Optional if your server does not require authentication."
+      }
+    }
+  ],
+  "models": {
+    "listable": true,
+    "suggested": []
+  }
+}

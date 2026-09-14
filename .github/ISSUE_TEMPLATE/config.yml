@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: "Vulnerabilidad de seguridad / Security vulnerability"
+    url: https://github.com/CharlyDesigner/enlazia/security/advisories/new
+    about: "Repórtala en privado, no en un issue público / Report it privately, not in a public issue."
+  - name: "Guía de despliegue en cPanel / cPanel deployment guide"
+    url: https://github.com/CharlyDesigner/enlazia/blob/main/docs/deploy-cpanel.md
+    about: "Revisa la solución de problemas antes de abrir un issue / Check troubleshooting before opening an issue."

@@ -1,0 +1,48 @@
+{
+  "$schema": "../../schemas/connector.schema.json",
+  "id": "nvidia",
+  "name": "NVIDIA NIM",
+  "category": "ai",
+  "kind": "ai-openai-compatible",
+  "description": {
+    "es": "Catálogo de modelos NIM de NVIDIA (build.nvidia.com).",
+    "en": "NVIDIA NIM model catalog (build.nvidia.com)."
+  },
+  "website": "https://build.nvidia.com",
+  "docs": "https://docs.api.nvidia.com/nim/reference/llm-apis",
+  "color": "#76B900",
+  "tags": [
+    "llm",
+    "nvidia",
+    "open-weights"
+  ],
+  "baseUrl": "https://integrate.api.nvidia.com/v1",
+  "auth": {
+    "type": "bearer",
+    "field": "apiKey"
+  },
+  "fields": [
+    {
+      "key": "apiKey",
+      "label": {
+        "es": "Clave de API",
+        "en": "API key"
+      },
+      "type": "secret",
+      "required": true,
+      "help": {
+        "es": "Genera una clave (nvapi-...) en build.nvidia.com.",
+        "en": "Generate a key (nvapi-...) at build.nvidia.com."
+      }
+    }
+  ],
+  "models": {
+    "listable": true,
+    "suggested": [
+      "deepseek-ai/deepseek-v4-pro",
+      "moonshotai/kimi-k3",
+      "nvidia/nemotron-3-ultra-550b-a55b",
+      "z-ai/glm-5.2"
+    ]
+  }
+}

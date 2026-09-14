@@ -1,0 +1,82 @@
+name: "Nuevo conector / New connector"
+description: "Propón un proveedor de IA o una API para el catálogo / Propose an AI provider or API for the catalog"
+title: "[Connector]: "
+labels: ["connector", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Consulta la referencia antes de enviar: [docs/connectors.es.md](https://github.com/CharlyDesigner/enlazia/blob/main/docs/connectors.es.md) · [docs/connectors.md](https://github.com/CharlyDesigner/enlazia/blob/main/docs/connectors.md)
+        Todos los datos deben venir de la **documentación oficial** del proveedor. / All details must come from the provider's **official documentation**.
+
+  - type: input
+    id: name
+    attributes:
+      label: "Nombre del servicio / Service name"
+      placeholder: "Acme AI"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: kind
+    attributes:
+      label: "Tipo / Kind"
+      options:
+        - "ai-openai-compatible"
+        - "ai-anthropic"
+        - "ai-gemini"
+        - "rest"
+        - "Ninguno encaja / None fits (nuevo protocolo / new protocol)"
+    validations:
+      required: true
+
+  - type: input
+    id: docs
+    attributes:
+      label: "Documentación oficial de la API / Official API docs"
+      placeholder: "https://docs.acme.ai/api"
+    validations:
+      required: true
+
+  - type: input
+    id: base-url
+    attributes:
+      label: "URL base / Base URL"
+      placeholder: "https://api.acme.ai/v1"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: auth
+    attributes:
+      label: "Autenticación / Authentication"
+      options:
+        - "bearer"
+        - "header"
+        - "query"
+        - "basic"
+        - "none"
+        - "OAuth2 / otra / other"
+    validations:
+      required: true
+
+  - type: textarea
+    id: endpoints
+    attributes:
+      label: "Endpoints de modelos o de prueba / Models or test endpoints"
+      description: "Ej. GET /models, GET /v1/me. Incluye enlaces a la documentación. / E.g. GET /models, GET /v1/me. Include links to the docs."
+    validations:
+      required: true
+
+  - type: textarea
+    id: manifest
+    attributes:
+      label: "Borrador del manifiesto (opcional) / Draft manifest (optional)"
+      render: json
+
+  - type: checkboxes
+    id: pr
+    attributes:
+      label: "Contribución / Contribution"
+      options:
+        - label: "Puedo enviar un PR con el conector y su entrada en connectors/SOURCES.md / I can open a PR with the connector and its connectors/SOURCES.md entry"

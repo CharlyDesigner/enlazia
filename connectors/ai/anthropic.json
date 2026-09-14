@@ -1,0 +1,52 @@
+{
+  "$schema": "../../schemas/connector.schema.json",
+  "id": "anthropic",
+  "name": "Anthropic",
+  "category": "ai",
+  "kind": "ai-anthropic",
+  "description": {
+    "es": "Modelos Claude de Anthropic para chat, agentes y programación.",
+    "en": "Anthropic Claude models for chat, agents and coding."
+  },
+  "website": "https://www.anthropic.com",
+  "docs": "https://platform.claude.com/docs",
+  "color": "#D97757",
+  "tags": [
+    "llm",
+    "claude",
+    "chat"
+  ],
+  "baseUrl": "https://api.anthropic.com",
+  "auth": {
+    "type": "header",
+    "header": "x-api-key",
+    "field": "apiKey"
+  },
+  "fields": [
+    {
+      "key": "apiKey",
+      "label": {
+        "es": "Clave de API",
+        "en": "API key"
+      },
+      "type": "secret",
+      "required": true,
+      "help": {
+        "es": "Créala en platform.claude.com, sección API keys.",
+        "en": "Create one at platform.claude.com under API keys."
+      }
+    }
+  ],
+  "defaultHeaders": {
+    "anthropic-version": "2023-06-01"
+  },
+  "models": {
+    "listable": true,
+    "suggested": [
+      "claude-opus-5",
+      "claude-fable-5-1",
+      "claude-sonnet-5",
+      "claude-haiku-4-5"
+    ]
+  }
+}

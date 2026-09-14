@@ -1,0 +1,44 @@
+{
+  "$schema": "../../schemas/connector.schema.json",
+  "id": "moonshot",
+  "name": "Moonshot AI (Kimi)",
+  "category": "ai",
+  "kind": "ai-openai-compatible",
+  "description": {
+    "es": "Modelos Kimi de Moonshot AI, endpoint internacional.",
+    "en": "Moonshot AI Kimi models, international endpoint."
+  },
+  "website": "https://platform.kimi.ai",
+  "docs": "https://platform.kimi.ai/docs/overview",
+  "color": "#1783FF",
+  "tags": [
+    "llm",
+    "kimi",
+    "long-context"
+  ],
+  "baseUrl": "https://api.moonshot.ai/v1",
+  "auth": {
+    "type": "bearer",
+    "field": "apiKey"
+  },
+  "fields": [
+    {
+      "key": "apiKey",
+      "label": {
+        "es": "Clave de API",
+        "en": "API key"
+      },
+      "type": "secret",
+      "required": true
+    }
+  ],
+  "models": {
+    "listable": true,
+    "suggested": [
+      "kimi-k3",
+      "kimi-k2.7-code",
+      "kimi-k2.7-code-highspeed",
+      "kimi-k2.6"
+    ]
+  }
+}

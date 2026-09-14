@@ -1,0 +1,41 @@
+{
+  "$schema": "../../schemas/connector.schema.json",
+  "id": "fireworks",
+  "name": "Fireworks AI",
+  "category": "ai",
+  "kind": "ai-openai-compatible",
+  "description": {
+    "es": "Inferencia rápida de modelos abiertos en Fireworks.",
+    "en": "Fast inference for open models on Fireworks."
+  },
+  "website": "https://fireworks.ai",
+  "docs": "https://docs.fireworks.ai",
+  "color": "#6720FF",
+  "tags": [
+    "llm",
+    "open-weights",
+    "fast"
+  ],
+  "baseUrl": "https://api.fireworks.ai/inference/v1",
+  "auth": {
+    "type": "bearer",
+    "field": "apiKey"
+  },
+  "fields": [
+    {
+      "key": "apiKey",
+      "label": {
+        "es": "Clave de API",
+        "en": "API key"
+      },
+      "type": "secret",
+      "required": true
+    }
+  ],
+  "models": {
+    "listable": false,
+    "suggested": [
+      "accounts/fireworks/models/deepseek-v3p1"
+    ]
+  }
+}

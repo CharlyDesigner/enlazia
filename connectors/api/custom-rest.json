@@ -1,0 +1,73 @@
+{
+  "$schema": "../../schemas/connector.schema.json",
+  "id": "custom-rest",
+  "name": "REST API (custom)",
+  "category": "api",
+  "kind": "rest",
+  "description": {
+    "es": "Conecta cualquier API REST con un encabezado de autenticación opcional.",
+    "en": "Connect any REST API with an optional authentication header."
+  },
+  "color": "#6B7280",
+  "tags": [
+    "rest",
+    "custom",
+    "http"
+  ],
+  "baseUrl": "{{baseUrl}}",
+  "auth": {
+    "type": "header",
+    "headerField": "authHeader",
+    "field": "authValue"
+  },
+  "fields": [
+    {
+      "key": "baseUrl",
+      "label": {
+        "es": "URL base",
+        "en": "Base URL"
+      },
+      "type": "url",
+      "required": true,
+      "placeholder": "https://api.ejemplo.com"
+    },
+    {
+      "key": "authHeader",
+      "label": {
+        "es": "Encabezado de autenticación",
+        "en": "Auth header"
+      },
+      "type": "text",
+      "required": false,
+      "default": "Authorization",
+      "help": {
+        "es": "Nombre del encabezado, por ejemplo Authorization o X-API-Key.",
+        "en": "Header name, e.g. Authorization or X-API-Key."
+      }
+    },
+    {
+      "key": "authValue",
+      "label": {
+        "es": "Valor de autenticación",
+        "en": "Auth value"
+      },
+      "type": "secret",
+      "required": false,
+      "help": {
+        "es": "Valor completo del encabezado, por ejemplo \"Bearer sk-...\".",
+        "en": "Full header value, e.g. \"Bearer sk-...\"."
+      }
+    }
+  ],
+  "actions": [
+    {
+      "id": "get-root",
+      "name": {
+        "es": "Consultar raíz",
+        "en": "Get root"
+      },
+      "method": "GET",
+      "path": "/"
+    }
+  ]
+}

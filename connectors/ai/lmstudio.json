@@ -1,0 +1,44 @@
+{
+  "$schema": "../../schemas/connector.schema.json",
+  "id": "lmstudio",
+  "name": "LM Studio",
+  "category": "ai",
+  "kind": "ai-openai-compatible",
+  "description": {
+    "es": "Modelos locales servidos desde LM Studio.",
+    "en": "Local models served from LM Studio."
+  },
+  "website": "https://lmstudio.ai",
+  "docs": "https://lmstudio.ai/docs/app/api/endpoints/openai",
+  "color": "#4B3FF0",
+  "tags": [
+    "llm",
+    "local",
+    "self-hosted"
+  ],
+  "baseUrl": "{{baseUrl}}",
+  "auth": {
+    "type": "none"
+  },
+  "fields": [
+    {
+      "key": "baseUrl",
+      "label": {
+        "es": "URL base",
+        "en": "Base URL"
+      },
+      "type": "url",
+      "required": true,
+      "default": "http://localhost:1234/v1",
+      "placeholder": "http://localhost:1234/v1",
+      "help": {
+        "es": "Dirección del servidor local, incluyendo /v1.",
+        "en": "Local server address, including /v1."
+      }
+    }
+  ],
+  "models": {
+    "listable": true,
+    "suggested": []
+  }
+}
