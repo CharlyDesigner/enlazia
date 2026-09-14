@@ -21,7 +21,7 @@ Enlazia is an open-source, bilingual (Spanish / English) web platform for connec
 
 Connectors are plain JSON manifests, so adding a new provider or API usually means writing a JSON file, not code.
 
-Landing page with full project details (ES/EN): https://charlydesigner.github.io/enlazia/
+Landing page with full project details (ES/EN): https://enlazia.carlosnavarro.site
 
 ## Features
 
