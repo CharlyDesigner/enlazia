@@ -69,24 +69,6 @@ jobs:
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -p "$SSH_PORT" -H "$SSH_HOST" >> ~/.ssh/known_hosts
 
-      - name: Diagnose Passenger binding (no secrets printed)
-        env:
-          SSH_HOST: ${{ secrets.CPANEL_HOST }}
-          SSH_USER: ${{ secrets.CPANEL_USER }}
-          SSH_PORT: ${{ secrets.CPANEL_SSH_PORT || '22' }}
-          APP_PATH: ${{ secrets.CPANEL_APP_PATH }}
-        run: |
-          SSH="ssh -i ~/.ssh/deploy_key -p $SSH_PORT"
-          echo "--- real subdomain document root (per cPanel, authoritative) ---"
-          DOCROOT=$($SSH "$SSH_USER@$SSH_HOST" "uapi DomainInfo domains_data 2>&1 | grep 'documentroot:.*enlazia\.carlosnavarro\.site' | awk '{print \$2}'")
-          echo "docroot=$DOCROOT"
-          echo "--- Passenger config lines only (SetEnv lines are deliberately excluded) ---"
-          $SSH "$SSH_USER@$SSH_HOST" "grep -h '^Passenger' '$DOCROOT/.htaccess' 2>&1 || echo '(no .htaccess or no Passenger lines there)'"
-          echo "--- does app.cjs exist where Passenger expects it? ---"
-          APPROOT=$($SSH "$SSH_USER@$SSH_HOST" "grep -h '^PassengerAppRoot' '$DOCROOT/.htaccess' 2>&1 | sed 's/PassengerAppRoot *\"\\(.*\\)\"/\\1/'")
-          echo "approot=$APPROOT"
-          $SSH "$SSH_USER@$SSH_HOST" "ls -la '$APPROOT' 2>&1 | head -20"
-
       - name: Upload and restart
         env:
           SSH_HOST: ${{ secrets.CPANEL_HOST }}
@@ -103,50 +85,3 @@ jobs:
             --exclude 'node_modules' --exclude '*.log' \
             -e "$SSH" release/ "$SSH_USER@$SSH_HOST:$APP_PATH/"
           $SSH "$SSH_USER@$SSH_HOST" "mkdir -p '$APP_PATH/tmp' && touch '$APP_PATH/tmp/restart.txt'"
-
-      - name: Verify what actually landed (no secrets)
-        env:
-          SSH_HOST: ${{ secrets.CPANEL_HOST }}
-          SSH_USER: ${{ secrets.CPANEL_USER }}
-          SSH_PORT: ${{ secrets.CPANEL_SSH_PORT || '22' }}
-          APP_PATH: ${{ secrets.CPANEL_APP_PATH }}
-        run: |
-          SSH="ssh -i ~/.ssh/deploy_key -p $SSH_PORT"
-          echo "--- APP_PATH listing after rsync ---"
-          $SSH "$SSH_USER@$SSH_HOST" "ls -la '$APP_PATH'"
-          echo "--- app.cjs content (not secret: it's just a require()) ---"
-          $SSH "$SSH_USER@$SSH_HOST" "cat '$APP_PATH/app.cjs'"
-          echo "--- restart.txt mtime ---"
-          $SSH "$SSH_USER@$SSH_HOST" "stat -c '%y %n' '$APP_PATH/tmp/restart.txt'"
-
-      - name: Inspect running Node process and nodevenv (no secrets)
-        env:
-          SSH_HOST: ${{ secrets.CPANEL_HOST }}
-          SSH_USER: ${{ secrets.CPANEL_USER }}
-          SSH_PORT: ${{ secrets.CPANEL_SSH_PORT || '22' }}
-        run: |
-          SSH="ssh -i ~/.ssh/deploy_key -p $SSH_PORT"
-          echo "--- ps: what is actually running (command line only, no env) ---"
-          $SSH "$SSH_USER@$SSH_HOST" "ps -o pid,etime,args -u \$(whoami) 2>&1 | grep -i -E 'node|passenger' | grep -v grep"
-          echo "--- ~/nodevenv/enlazia tree ---"
-          $SSH "$SSH_USER@$SSH_HOST" "find ~/nodevenv/enlazia -maxdepth 3 2>&1"
-          echo "--- CloudLinux selector's own record for this app (config only) ---"
-          $SSH "$SSH_USER@$SSH_HOST" "cloudlinux-selector list --json --interpreter nodejs 2>&1 | head -c 2000"
-
-      - name: Try running the app directly to see startup errors
-        env:
-          SSH_HOST: ${{ secrets.CPANEL_HOST }}
-          SSH_USER: ${{ secrets.CPANEL_USER }}
-          SSH_PORT: ${{ secrets.CPANEL_SSH_PORT || '22' }}
-          APP_PATH: ${{ secrets.CPANEL_APP_PATH }}
-        run: |
-          SSH="ssh -i ~/.ssh/deploy_key -p $SSH_PORT"
-          echo "--- ~/logs directory (filenames only) ---"
-          $SSH "$SSH_USER@$SSH_HOST" "ls -la ~/logs 2>&1"
-          echo "--- direct node invocation (5s timeout, own stdout/stderr only) ---"
-          $SSH "$SSH_USER@$SSH_HOST" "cd '$APP_PATH' && timeout 5 /home/\$(whoami)/nodevenv/enlazia/24/bin/node app.cjs 2>&1 | head -c 3000"
-          echo "--- any OTHER startup-like files in APP_PATH root? ---"
-          $SSH "$SSH_USER@$SSH_HOST" "cd '$APP_PATH' && ls -la *.js *.cjs *.mjs 2>&1"
-          echo "--- CloudLinux's own registered config for this app (structure only) ---"
-          $SSH "$SSH_USER@$SSH_HOST" "find ~/.cl.selector -iname '*node*' -o -iname '*enlazia*' 2>&1"
-          $SSH "$SSH_USER@$SSH_HOST" "find ~/.cl.selector -type f 2>&1 | xargs -I{} sh -c \"echo ==={}===; python3 -c \\\"import json,sys; d=json.load(open('{}')); print(json.dumps({k:v for k,v in d.items() if k!='env_vars'}, indent=2))\\\" 2>&1 || cat {}\" 2>&1 | grep -v -i 'setenv\\|master_key\\|password' | head -c 3000"
