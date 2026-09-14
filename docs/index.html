@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="es" data-lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Enlazia — Conecta IAs y APIs desde un solo lugar</title>
+<meta name="description" content="Enlazia: plataforma web open source y bilingüe para conectar proveedores de IA y APIs de terceros desde tu propio servidor.">
+<link rel="icon" href="assets/enlazia-icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#020617; --card:#0E1223; --border:#1E293B; --border2:#334155;
+  --text:#F1F5F9; --muted:#94A3B8; --accent:#22C55E; --accent2:#15803D;
+  --radius:14px; --maxw:1100px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--text);
+  font-family:"IBM Plex Sans",system-ui,sans-serif; line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+code, .mono{font-family:"JetBrains Mono",monospace}
+a{color:var(--accent)}
+.wrap{max-width:var(--maxw); margin:0 auto; padding:0 24px}
+[data-i18n]{display:none !important}
+html[data-lang="es"] [data-i18n="es"]{display:revert !important}
+html[data-lang="en"] [data-i18n="en"]{display:revert !important}
+
+header{
+  position:sticky; top:0; z-index:20; backdrop-filter:blur(10px);
+  background:rgba(2,6,23,.82); border-bottom:1px solid var(--border);
+}
+nav.wrap{display:flex; align-items:center; justify-content:space-between; height:64px}
+.brand{display:flex; align-items:center; gap:10px; font-weight:700; font-size:18px; text-decoration:none; color:var(--text)}
+.brand img{width:28px; height:28px}
+.nav-links{display:flex; align-items:center; gap:22px}
+.nav-links a{color:var(--muted); text-decoration:none; font-size:14px; font-weight:500}
+.nav-links a:hover{color:var(--text)}
+.lang-toggle{display:flex; border:1px solid var(--border2); border-radius:999px; overflow:hidden}
+.lang-toggle button{
+  background:none; border:none; color:var(--muted); font:inherit; font-size:13px;
+  font-weight:600; padding:6px 12px; cursor:pointer;
+}
+.lang-toggle button[aria-pressed="true"]{background:var(--accent); color:#04140A}
+
+.hero{padding:72px 0 56px; text-align:center}
+.hero .mascot{width:120px; height:120px; margin-bottom:22px}
+.hero h1{font-size:clamp(34px,6vw,56px); margin:0 0 14px; letter-spacing:-.02em}
+.hero .accent{color:var(--accent)}
+.hero p.tagline{color:var(--muted); font-size:19px; max-width:640px; margin:0 auto 32px}
+.cta-row{display:flex; gap:14px; justify-content:center; flex-wrap:wrap}
+.btn{
+  display:inline-flex; align-items:center; gap:8px; padding:12px 22px; border-radius:10px;
+  font-weight:600; font-size:15px; text-decoration:none; border:1px solid transparent;
+  transition:transform .15s ease, background .15s ease;
+}
+.btn:hover{transform:translateY(-1px)}
+.btn-primary{background:var(--accent); color:#04140A}
+.btn-primary:hover{background:#2fdc70}
+.btn-ghost{border-color:var(--border2); color:var(--text)}
+.btn-ghost:hover{background:var(--card)}
+.status-note{margin-top:22px; font-size:13px; color:var(--muted)}
+.status-note .dot{display:inline-block; width:7px; height:7px; border-radius:50%; background:#F59E0B; margin-right:6px}
+
+section{padding:64px 0; border-top:1px solid var(--border)}
+h2{font-size:clamp(24px,4vw,32px); margin:0 0 10px; letter-spacing:-.01em}
+.section-sub{color:var(--muted); max-width:620px; margin:0 0 40px; font-size:16px}
+.grid{display:grid; gap:18px}
+.grid-3{grid-template-columns:repeat(3,1fr)}
+.grid-2{grid-template-columns:repeat(2,1fr)}
+@media (max-width:820px){.grid-3{grid-template-columns:1fr 1fr}.grid-2{grid-template-columns:1fr}}
+@media (max-width:560px){.grid-3{grid-template-columns:1fr}}
+
+.card{
+  background:var(--card); border:1px solid var(--border); border-radius:var(--radius);
+  padding:22px;
+}
+.card h3{margin:0 0 8px; font-size:17px}
+.card p{margin:0; color:var(--muted); font-size:14.5px}
+.card .icon{
+  width:38px; height:38px; border-radius:10px; background:rgba(34,197,94,.12);
+  display:flex; align-items:center; justify-content:center; margin-bottom:14px; color:var(--accent);
+}
+.card .icon svg{width:20px; height:20px}
+
+.how{counter-reset:step}
+.how .card{position:relative; padding-top:30px}
+.how .card::before{
+  counter-increment:step; content:counter(step);
+  position:absolute; top:-14px; left:20px; width:28px; height:28px; border-radius:50%;
+  background:var(--accent); color:#04140A; font-weight:700; font-size:14px;
+  display:flex; align-items:center; justify-content:center;
+}
+
+.chips{display:flex; flex-wrap:wrap; gap:9px}
+.chip{
+  border:1px solid var(--border2); border-radius:999px; padding:7px 14px; font-size:13.5px;
+  color:var(--text); background:var(--card);
+}
+.chip.rest{border-color:var(--accent2); color:#4ade80}
+.catalog-group{margin-bottom:26px}
+.catalog-group h3{font-size:14px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin:0 0 12px; font-weight:600}
+
+pre{
+  background:var(--card); border:1px solid var(--border); border-radius:var(--radius);
+  padding:20px 22px; overflow-x:auto; font-size:14px; line-height:1.7;
+}
+pre .c{color:var(--muted)}
+pre .g{color:var(--accent)}
+
+.split{display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:start}
+@media (max-width:820px){.split{grid-template-columns:1fr}}
+
+table.env{width:100%; border-collapse:collapse; font-size:14px}
+table.env th, table.env td{text-align:left; padding:10px 12px; border-bottom:1px solid var(--border)}
+table.env th{color:var(--muted); font-weight:600; font-size:12.5px; text-transform:uppercase; letter-spacing:.05em}
+table.env td:first-child{font-family:"JetBrains Mono",monospace; color:var(--accent); white-space:nowrap}
+
+.roadmap ul{list-style:none; margin:0; padding:0; display:grid; gap:12px}
+.roadmap li{display:flex; gap:10px; align-items:flex-start; color:var(--muted); font-size:15px}
+.roadmap li::before{content:"→"; color:var(--accent); font-weight:700; flex:none}
+
+footer{padding:40px 0; border-top:1px solid var(--border); color:var(--muted); font-size:13.5px}
+footer .wrap{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px}
+footer a{color:var(--muted); text-decoration:none}
+footer a:hover{color:var(--text)}
+
+.badge-license{display:inline-block; border:1px solid var(--border2); border-radius:6px; padding:2px 8px; font-size:12px; font-family:"JetBrains Mono",monospace}
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap">
+    <a class="brand" href="#top">
+      <img src="assets/enlazia-icon.svg" alt="">
+      Enlazia
+    </a>
+    <div class="nav-links">
+      <a href="#features" data-i18n="es">Funciones</a>
+      <a href="#features" data-i18n="en">Features</a>
+      <a href="#connectors" data-i18n="es">Conectores</a>
+      <a href="#connectors" data-i18n="en">Connectors</a>
+      <a href="#quickstart" data-i18n="es">Instalación</a>
+      <a href="#quickstart" data-i18n="en">Install</a>
+      <a href="https://github.com/CharlyDesigner/enlazia">GitHub</a>
+      <div class="lang-toggle" role="group" aria-label="Language">
+        <button type="button" data-set-lang="es" aria-pressed="true">ES</button>
+        <button type="button" data-set-lang="en" aria-pressed="false">EN</button>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<main id="top">
+  <section class="hero" style="border-top:none">
+    <div class="wrap">
+      <img class="mascot" src="assets/enlazia-mark.svg" alt="Enchufito, la mascota de Enlazia">
+      <h1>
+        <span data-i18n="es">Conecta <span class="accent">IAs</span> y <span class="accent">APIs</span> desde un solo lugar</span>
+        <span data-i18n="en">Connect <span class="accent">AI</span> and <span class="accent">APIs</span> from one place</span>
+      </h1>
+      <p class="tagline" data-i18n="es">Plataforma web de código abierto para guardar tus credenciales cifradas, probar conexiones y chatear con modelos de IA — en tu propio servidor, sin depender de terceros.</p>
+      <p class="tagline" data-i18n="en">An open-source web platform to store your credentials encrypted, test connections, and chat with AI models — on your own server, no third parties involved.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="https://github.com/CharlyDesigner/enlazia" data-i18n="es">Ver en GitHub</a>
+        <a class="btn btn-primary" href="https://github.com/CharlyDesigner/enlazia" data-i18n="en">View on GitHub</a>
+        <a class="btn btn-ghost" href="#quickstart" data-i18n="es">Instalación rápida</a>
+        <a class="btn btn-ghost" href="#quickstart" data-i18n="en">Quick start</a>
+      </div>
+      <p class="status-note">
+        <span class="dot"></span>
+        <span data-i18n="es">El demo público en enlazia.carlosnavarro.site está temporalmente fuera de línea (problema de hosting en curso). El proyecto funciona perfectamente en local o autoalojado — ver instalación abajo.</span>
+        <span data-i18n="en">The public demo at enlazia.carlosnavarro.site is temporarily offline (ongoing hosting issue). The project works fine locally or self-hosted — see install steps below.</span>
+      </p>
+    </div>
+  </section>
+
+  <section id="what">
+    <div class="wrap split">
+      <div>
+        <h2 data-i18n="es">¿Qué es Enlazia?</h2>
+        <h2 data-i18n="en">What is Enlazia?</h2>
+        <p class="section-sub" style="margin-bottom:0" data-i18n="es">
+          Enlazia es una plataforma web bilingüe (español / inglés) y de código abierto para conectar proveedores de IA y APIs REST. Agregas tus credenciales una sola vez, Enlazia las guarda cifradas en tu propio servidor, y desde el navegador puedes probar conexiones, chatear con modelos y enviar peticiones REST. Tus claves nunca se devuelven al navegador.
+        </p>
+        <p class="section-sub" style="margin-bottom:0" data-i18n="en">
+          Enlazia is an open-source, bilingual (Spanish / English) web platform for connecting AI providers and REST APIs. You add your credentials once, Enlazia stores them encrypted on your own server, and you can test connections, chat with models and send REST requests from the browser. Your API keys are never sent back to the browser.
+        </p>
+      </div>
+      <div>
+        <p class="section-sub" style="margin-bottom:0" data-i18n="es">
+          Los conectores son manifiestos JSON simples: agregar un proveedor nuevo normalmente significa escribir un archivo JSON, no código. El servidor se empaqueta en un solo archivo, así que corre en hosting compartido (cPanel) sin Docker ni acceso root.
+        </p>
+        <p class="section-sub" style="margin-bottom:0" data-i18n="en">
+          Connectors are plain JSON manifests, so adding a new provider or API usually means writing a JSON file, not code. The server is bundled into a single file, so it runs on shared hosting (cPanel) without Docker or root access.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="how" id="how">
+    <div class="wrap">
+      <h2 data-i18n="es">Cómo funciona</h2>
+      <h2 data-i18n="en">How it works</h2>
+      <p class="section-sub" data-i18n="es">Tres pasos, siempre con tus claves cifradas en tu servidor.</p>
+      <p class="section-sub" data-i18n="en">Three steps, your keys always encrypted on your own server.</p>
+      <div class="grid grid-3">
+        <div class="card">
+          <h3 data-i18n="es">Conecta</h3>
+          <h3 data-i18n="en">Connect</h3>
+          <p data-i18n="es">Elige un conector del catálogo (OpenAI, Anthropic, Gemini, GitHub, Stripe…) y pega tu API key. Se cifra con AES-256-GCM antes de guardarse.</p>
+          <p data-i18n="en">Pick a connector from the catalog (OpenAI, Anthropic, Gemini, GitHub, Stripe…) and paste your API key. It's encrypted with AES-256-GCM before it's stored.</p>
+        </div>
+        <div class="card">
+          <h3 data-i18n="es">Prueba</h3>
+          <h3 data-i18n="en">Test</h3>
+          <p data-i18n="es">Enlazia valida la conexión y lista los modelos disponibles. Cada llamada queda registrada: método, URL redactada, estado y duración.</p>
+          <p data-i18n="en">Enlazia validates the connection and lists available models. Every call is logged: method, redacted URL, status and duration.</p>
+        </div>
+        <div class="card">
+          <h3 data-i18n="es">Usa</h3>
+          <h3 data-i18n="en">Use</h3>
+          <p data-i18n="es">Chatea con cualquier modelo configurado en el Playground (streaming en vivo) o arma peticiones REST con el constructor de peticiones.</p>
+          <p data-i18n="en">Chat with any configured model in the Playground (live streaming) or build REST requests with the request builder.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="features">
+    <div class="wrap">
+      <h2 data-i18n="es">Funciones</h2>
+      <h2 data-i18n="en">Features</h2>
+      <p class="section-sub" data-i18n="es">Todo lo necesario para administrar tus conexiones de IA y APIs en un solo lugar.</p>
+      <p class="section-sub" data-i18n="en">Everything you need to manage your AI and API connections in one place.</p>
+      <div class="grid grid-3">
+        <div class="card"><div class="icon">🔐</div>
+          <h3 data-i18n="es">Bóveda cifrada</h3><h3 data-i18n="en">Encrypted vault</h3>
+          <p data-i18n="es">Credenciales cifradas en reposo con AES-256-GCM. La API nunca las devuelve.</p>
+          <p data-i18n="en">Credentials encrypted at rest with AES-256-GCM. The API never returns them.</p>
+        </div>
+        <div class="card"><div class="icon">💬</div>
+          <h3 data-i18n="es">Playground con streaming</h3><h3 data-i18n="en">Streaming playground</h3>
+          <p data-i18n="es">Chatea con cualquier modelo configurado, con prompt de sistema y temperatura, vía Server-Sent Events.</p>
+          <p data-i18n="en">Chat with any configured model, with system prompt and temperature, over Server-Sent Events.</p>
+        </div>
+        <div class="card"><div class="icon">🌐</div>
+          <h3 data-i18n="es">22 conectores de IA</h3><h3 data-i18n="en">22 AI connectors</h3>
+          <p data-i18n="es">OpenAI, Anthropic, Gemini, Azure, DeepSeek, Groq, Mistral, xAI, OpenRouter y más, listos de fábrica.</p>
+          <p data-i18n="en">OpenAI, Anthropic, Gemini, Azure, DeepSeek, Groq, Mistral, xAI, OpenRouter and more, out of the box.</p>
+        </div>
+        <div class="card"><div class="icon">🧩</div>
+          <h3 data-i18n="es">SDK de conectores vía JSON</h3><h3 data-i18n="en">Connector SDK via JSON</h3>
+          <p data-i18n="es">Agrega un proveedor nuevo con un manifiesto JSON. Hay un JSON Schema para autocompletado en tu editor.</p>
+          <p data-i18n="en">Add a new provider with a JSON manifest. A JSON Schema is provided for editor autocompletion.</p>
+        </div>
+        <div class="card"><div class="icon">📊</div>
+          <h3 data-i18n="es">Registro de peticiones</h3><h3 data-i18n="en">Request logs</h3>
+          <p data-i18n="es">Método, URL redactada, estado, duración y errores de cada llamada saliente, más estadísticas de 24 horas.</p>
+          <p data-i18n="en">Method, redacted URL, status, duration and errors for every outgoing call, plus 24-hour stats.</p>
+        </div>
+        <div class="card"><div class="icon">🏠</div>
+          <h3 data-i18n="es">Fácil de alojar</h3><h3 data-i18n="en">Easy hosting</h3>
+          <p data-i18n="es">El servidor se empaqueta en un solo archivo: corre en hosting compartido cPanel, sin Docker ni root.</p>
+          <p data-i18n="en">The server is bundled into a single file: it runs on shared cPanel hosting, no Docker or root access.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="connectors">
+    <div class="wrap">
+      <h2 data-i18n="es">Catálogo de conectores</h2>
+      <h2 data-i18n="en">Connector catalog</h2>
+      <p class="section-sub" data-i18n="es">22 proveedores de IA y 4 APIs REST incluidos. Agregar uno nuevo es escribir un JSON.</p>
+      <p class="section-sub" data-i18n="en">22 AI providers and 4 REST APIs included. Adding a new one is just writing a JSON file.</p>
+
+      <div class="catalog-group">
+        <h3 data-i18n="es">Proveedores de IA</h3>
+        <h3 data-i18n="en">AI providers</h3>
+        <div class="chips">
+          <span class="chip">OpenAI</span><span class="chip">Anthropic</span><span class="chip">Google Gemini</span>
+          <span class="chip">Azure OpenAI</span><span class="chip">DeepSeek</span><span class="chip">Groq</span>
+          <span class="chip">Mistral AI</span><span class="chip">xAI Grok</span><span class="chip">OpenRouter</span>
+          <span class="chip">Together AI</span><span class="chip">Fireworks AI</span><span class="chip">Perplexity</span>
+          <span class="chip">Cerebras</span><span class="chip">Moonshot AI (Kimi)</span><span class="chip">Qwen</span>
+          <span class="chip">Z.ai (GLM)</span><span class="chip">Cohere</span><span class="chip">NVIDIA NIM</span>
+          <span class="chip">Hugging Face</span><span class="chip">Ollama</span><span class="chip">LM Studio</span>
+          <span class="chip" data-i18n="es">Genérico compatible con OpenAI</span>
+          <span class="chip" data-i18n="en">Generic OpenAI-compatible</span>
+        </div>
+      </div>
+
+      <div class="catalog-group">
+        <h3 data-i18n="es">APIs REST</h3>
+        <h3 data-i18n="en">REST APIs</h3>
+        <div class="chips">
+          <span class="chip rest">GitHub</span><span class="chip rest">Notion</span><span class="chip rest">Stripe</span>
+          <span class="chip rest" data-i18n="es">REST genérico personalizado</span>
+          <span class="chip rest" data-i18n="en">Generic custom REST</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="quickstart">
+    <div class="wrap">
+      <h2 data-i18n="es">Instalación rápida</h2>
+      <h2 data-i18n="en">Quick start</h2>
+      <p class="section-sub" data-i18n="es">Requiere Node.js 22.13+ (usa <code class="mono">node:sqlite</code> nativo) y pnpm 11.</p>
+      <p class="section-sub" data-i18n="en">Requires Node.js 22.13+ (uses the built-in <code class="mono">node:sqlite</code>) and pnpm 11.</p>
+      <pre><code><span class="c"># <span data-i18n="es">clona el repositorio</span><span data-i18n="en">clone the repo</span></span>
+git clone https://github.com/CharlyDesigner/enlazia.git
+<span class="g">cd</span> enlazia
+
+<span class="c"># <span data-i18n="es">instala y arranca en modo desarrollo</span><span data-i18n="en">install and start in dev mode</span></span>
+pnpm install
+cp .env.example .env
+pnpm dev</code></pre>
+      <p class="section-sub" style="margin-top:18px" data-i18n="es">Abre <code class="mono">http://localhost:5173</code>. La API corre en <code class="mono">:8787</code> y el frontend le hace proxy a <code class="mono">/api</code>.</p>
+      <p class="section-sub" style="margin-top:18px" data-i18n="en">Open <code class="mono">http://localhost:5173</code>. The API runs on <code class="mono">:8787</code> and the frontend proxies <code class="mono">/api</code> to it.</p>
+
+      <div class="split" style="margin-top:36px">
+        <div>
+          <h3 style="margin:0 0 14px" data-i18n="es">Variables de entorno clave</h3>
+          <h3 style="margin:0 0 14px" data-i18n="en">Key environment variables</h3>
+          <table class="env">
+            <tr data-i18n="es"><th>Variable</th><th>Descripción</th></tr>
+            <tr data-i18n="en"><th>Variable</th><th>Description</th></tr>
+            <tr data-i18n="es"><td>ENLAZIA_PASSWORD</td><td>Contraseña de acceso, obligatoria si es accesible desde la red.</td></tr>
+            <tr data-i18n="en"><td>ENLAZIA_PASSWORD</td><td>Access password, required if reachable from the network.</td></tr>
+            <tr data-i18n="es"><td>ENLAZIA_MASTER_KEY</td><td>Llave de 32 bytes para cifrar credenciales (se genera sola si falta).</td></tr>
+            <tr data-i18n="en"><td>ENLAZIA_MASTER_KEY</td><td>32-byte key to encrypt credentials (auto-generated if empty).</td></tr>
+            <tr data-i18n="es"><td>ENLAZIA_DEMO</td><td>Modo demo público: solo catálogo y documentación.</td></tr>
+            <tr data-i18n="en"><td>ENLAZIA_DEMO</td><td>Public demo mode: catalog and docs only.</td></tr>
+          </table>
+        </div>
+        <div>
+          <h3 style="margin:0 0 14px" data-i18n="es">Producción / cPanel</h3>
+          <h3 style="margin:0 0 14px" data-i18n="en">Production / cPanel</h3>
+          <p class="section-sub" style="margin-bottom:14px" data-i18n="es">El servidor se empaqueta en un solo archivo, así que puedes correrlo en hosting compartido con "Setup Node.js App" (Phusion Passenger), sin Docker ni acceso root.</p>
+          <p class="section-sub" style="margin-bottom:14px" data-i18n="en">The server bundles into a single file, so it runs on shared hosting with "Setup Node.js App" (Phusion Passenger), no Docker or root access needed.</p>
+          <pre style="font-size:13px"><code>pnpm build
+pnpm start</code></pre>
+          <p class="section-sub" style="margin-top:14px; margin-bottom:0" data-i18n="es">Guía completa: <a href="https://github.com/CharlyDesigner/enlazia/blob/main/docs/deploy-cpanel.md">docs/deploy-cpanel.md</a></p>
+          <p class="section-sub" style="margin-top:14px; margin-bottom:0" data-i18n="en">Full guide: <a href="https://github.com/CharlyDesigner/enlazia/blob/main/docs/deploy-cpanel.md">docs/deploy-cpanel.md</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="roadmap" id="roadmap">
+    <div class="wrap">
+      <h2 data-i18n="es">Hoja de ruta</h2>
+      <h2 data-i18n="en">Roadmap</h2>
+      <ul>
+        <li data-i18n="es">Cliente MCP (conectar y administrar servidores Model Context Protocol)</li>
+        <li data-i18n="en">MCP client (connect to and manage Model Context Protocol servers)</li>
+        <li data-i18n="es">Importador de OpenAPI para generar conectores REST</li>
+        <li data-i18n="en">OpenAPI importer to generate REST connectors</li>
+        <li data-i18n="es">Más tipos de autenticación, incluyendo OAuth 2.0</li>
+        <li data-i18n="en">More auth types, including OAuth 2.0</li>
+        <li data-i18n="es">Modelos de imagen y audio</li>
+        <li data-i18n="en">Image and audio models</li>
+        <li data-i18n="es">Cuentas multiusuario</li>
+        <li data-i18n="en">Multi-user accounts</li>
+        <li data-i18n="es">Compilación de escritorio</li>
+        <li data-i18n="en">Desktop build</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="contribute">
+    <div class="wrap" style="text-align:center">
+      <h2 data-i18n="es">Código abierto, hecho para la comunidad</h2>
+      <h2 data-i18n="en">Open source, built for the community</h2>
+      <p class="section-sub" style="margin-left:auto; margin-right:auto" data-i18n="es">
+        Enlazia es Apache-2.0. Las contribuciones son bienvenidas, especialmente conectores nuevos. Es un proyecto independiente, inspirado en ideas de <a href="https://github.com/iOfficeAI/AionUi">AionUi</a> (Apache-2.0), sin código ni marca de AionUi.
+      </p>
+      <p class="section-sub" style="margin-left:auto; margin-right:auto" data-i18n="en">
+        Enlazia is Apache-2.0 licensed. Contributions are welcome, especially new connectors. It's an independent project, inspired by ideas from <a href="https://github.com/iOfficeAI/AionUi">AionUi</a> (Apache-2.0), with no AionUi code or brand included.
+      </p>
+      <div class="cta-row" style="margin-top:24px">
+        <a class="btn btn-primary" href="https://github.com/CharlyDesigner/enlazia" data-i18n="es">Explorar el repositorio</a>
+        <a class="btn btn-primary" href="https://github.com/CharlyDesigner/enlazia" data-i18n="en">Explore the repository</a>
+        <a class="btn btn-ghost" href="https://github.com/CharlyDesigner/enlazia/blob/main/CONTRIBUTING.md" data-i18n="es">Cómo contribuir</a>
+        <a class="btn btn-ghost" href="https://github.com/CharlyDesigner/enlazia/blob/main/CONTRIBUTING.md" data-i18n="en">How to contribute</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 <a href="https://carlosnavarro.site">Charly Designer</a> · <span class="badge-license">Apache-2.0</span></span>
+    <span>
+      <a href="https://github.com/CharlyDesigner/enlazia">GitHub</a> ·
+      <a href="https://github.com/CharlyDesigner/enlazia/blob/main/README.es.md" data-i18n="es">README</a>
+      <a href="https://github.com/CharlyDesigner/enlazia/blob/main/README.md" data-i18n="en">README</a> ·
+      <a href="https://github.com/CharlyDesigner/enlazia/issues" data-i18n="es">Reportar un problema</a>
+      <a href="https://github.com/CharlyDesigner/enlazia/issues" data-i18n="en">Report an issue</a>
+    </span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  function readStored(){ try { return localStorage.getItem('enlazia-lang'); } catch (e) { return null; } }
+  function writeStored(l){ try { localStorage.setItem('enlazia-lang', l); } catch (e) {} }
+  var stored = readStored();
+  var lang = stored || (navigator.language && navigator.language.toLowerCase().indexOf('es') === 0 ? 'es' : 'en');
+  function apply(l){
+    document.documentElement.setAttribute('data-lang', l);
+    document.documentElement.setAttribute('lang', l);
+    document.querySelectorAll('[data-set-lang]').forEach(function(btn){
+      btn.setAttribute('aria-pressed', btn.getAttribute('data-set-lang') === l ? 'true' : 'false');
+    });
+    writeStored(l);
+  }
+  document.querySelectorAll('[data-set-lang]').forEach(function(btn){
+    btn.addEventListener('click', function(){ apply(btn.getAttribute('data-set-lang')); });
+  });
+  apply(lang);
+})();
+</script>
+</body>
+</html>
