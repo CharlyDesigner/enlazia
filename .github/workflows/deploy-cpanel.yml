@@ -69,6 +69,24 @@ jobs:
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -p "$SSH_PORT" -H "$SSH_HOST" >> ~/.ssh/known_hosts
 
+      - name: Diagnose Passenger binding (no secrets printed)
+        env:
+          SSH_HOST: ${{ secrets.CPANEL_HOST }}
+          SSH_USER: ${{ secrets.CPANEL_USER }}
+          SSH_PORT: ${{ secrets.CPANEL_SSH_PORT || '22' }}
+          APP_PATH: ${{ secrets.CPANEL_APP_PATH }}
+        run: |
+          SSH="ssh -i ~/.ssh/deploy_key -p $SSH_PORT"
+          echo "--- real subdomain document root (per cPanel, authoritative) ---"
+          DOCROOT=$($SSH "$SSH_USER@$SSH_HOST" "uapi DomainInfo domains_data 2>&1 | grep -A1 'domain: enlazia' | grep documentroot | awk '{print \$2}'")
+          echo "docroot=$DOCROOT"
+          echo "--- Passenger config lines only (SetEnv lines are deliberately excluded) ---"
+          $SSH "$SSH_USER@$SSH_HOST" "grep -h '^Passenger' '$DOCROOT/.htaccess' 2>&1 || echo '(no .htaccess or no Passenger lines there)'"
+          echo "--- does app.cjs exist where Passenger expects it? ---"
+          APPROOT=$($SSH "$SSH_USER@$SSH_HOST" "grep -h '^PassengerAppRoot' '$DOCROOT/.htaccess' 2>&1 | sed 's/PassengerAppRoot *\"\\(.*\\)\"/\\1/'")
+          echo "approot=$APPROOT"
+          $SSH "$SSH_USER@$SSH_HOST" "ls -la '$APPROOT' 2>&1 | head -20"
+
       - name: Upload and restart
         env:
           SSH_HOST: ${{ secrets.CPANEL_HOST }}
