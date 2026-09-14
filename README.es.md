@@ -21,7 +21,7 @@ Enlazia es una plataforma web de código abierto y bilingüe (español / inglés
 
 Los conectores son manifiestos JSON, así que agregar un proveedor o una API normalmente consiste en escribir un archivo JSON, sin tocar código.
 
-Demo pública (solo lectura): https://enlazia.carlosnavarro.site
+Landing con toda la información del proyecto (ES/EN): https://charlydesigner.github.io/enlazia/
 
 ## Funcionalidades
 
