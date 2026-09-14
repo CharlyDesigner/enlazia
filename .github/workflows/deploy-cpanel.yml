@@ -118,3 +118,17 @@ jobs:
           $SSH "$SSH_USER@$SSH_HOST" "cat '$APP_PATH/app.cjs'"
           echo "--- restart.txt mtime ---"
           $SSH "$SSH_USER@$SSH_HOST" "stat -c '%y %n' '$APP_PATH/tmp/restart.txt'"
+
+      - name: Inspect running Node process and nodevenv (no secrets)
+        env:
+          SSH_HOST: ${{ secrets.CPANEL_HOST }}
+          SSH_USER: ${{ secrets.CPANEL_USER }}
+          SSH_PORT: ${{ secrets.CPANEL_SSH_PORT || '22' }}
+        run: |
+          SSH="ssh -i ~/.ssh/deploy_key -p $SSH_PORT"
+          echo "--- ps: what is actually running (command line only, no env) ---"
+          $SSH "$SSH_USER@$SSH_HOST" "ps -o pid,etime,args -u \$(whoami) 2>&1 | grep -i -E 'node|passenger' | grep -v grep"
+          echo "--- ~/nodevenv/enlazia tree ---"
+          $SSH "$SSH_USER@$SSH_HOST" "find ~/nodevenv/enlazia -maxdepth 3 2>&1"
+          echo "--- CloudLinux selector's own record for this app (config only) ---"
+          $SSH "$SSH_USER@$SSH_HOST" "cloudlinux-selector list --json --interpreter nodejs 2>&1 | head -c 2000"
