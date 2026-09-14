@@ -69,16 +69,6 @@ jobs:
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -p "$SSH_PORT" -H "$SSH_HOST" >> ~/.ssh/known_hosts
 
-      - name: Probe remote shell output
-        env:
-          SSH_HOST: ${{ secrets.CPANEL_HOST }}
-          SSH_USER: ${{ secrets.CPANEL_USER }}
-          SSH_PORT: ${{ secrets.CPANEL_SSH_PORT || '22' }}
-        run: |
-          echo "--- raw bytes printed by a non-interactive SSH command (should be empty) ---"
-          ssh -i ~/.ssh/deploy_key -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" 'echo ENLAZIA_PROBE_MARKER' 2>&1 | cat -A
-          echo "--- end probe ---"
-
       - name: Upload and restart
         env:
           SSH_HOST: ${{ secrets.CPANEL_HOST }}
@@ -87,6 +77,8 @@ jobs:
           APP_PATH: ${{ secrets.CPANEL_APP_PATH }}
         run: |
           SSH="ssh -i ~/.ssh/deploy_key -p $SSH_PORT"
+          # Setup Node.js App doesn't always pre-create the application root.
+          $SSH "$SSH_USER@$SSH_HOST" "mkdir -p '$APP_PATH'"
           # data/ (database, master key, custom connectors) and .env live only on the server and are never touched.
           # node_modules and logs may be created by cPanel's Node.js selector.
           rsync -az --delete --exclude 'data/' --exclude '.env' --exclude 'tmp/' --exclude '.htaccess' \
