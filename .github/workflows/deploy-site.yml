@@ -1,0 +1,68 @@
+name: Deploy landing site to cPanel
+
+# Publishes docs/ (the static, dependency-free landing/tutorial page) to
+# enlazia.carlosnavarro.site over SSH. Plain HTML/CSS/JS — no Node.js,
+# no Passenger, no build step. Required repository secrets: CPANEL_HOST,
+# CPANEL_USER, CPANEL_SSH_KEY, CPANEL_APP_PATH (the subdomain's document
+# root). Optional: CPANEL_SSH_PORT (default 22).
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['docs/**']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-site
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check deploy secrets
+        env:
+          HAS_HOST: ${{ secrets.CPANEL_HOST != '' }}
+          HAS_USER: ${{ secrets.CPANEL_USER != '' }}
+          HAS_KEY: ${{ secrets.CPANEL_SSH_KEY != '' }}
+          HAS_PATH: ${{ secrets.CPANEL_APP_PATH != '' }}
+        run: |
+          missing=""
+          [ "$HAS_HOST" = true ] || missing="$missing CPANEL_HOST"
+          [ "$HAS_USER" = true ] || missing="$missing CPANEL_USER"
+          [ "$HAS_KEY" = true ] || missing="$missing CPANEL_SSH_KEY"
+          [ "$HAS_PATH" = true ] || missing="$missing CPANEL_APP_PATH"
+          if [ -n "$missing" ]; then
+            echo "::error::Missing repository secrets:$missing"
+            exit 1
+          fi
+
+      - name: Configure SSH
+        env:
+          SSH_KEY: ${{ secrets.CPANEL_SSH_KEY }}
+          SSH_HOST: ${{ secrets.CPANEL_HOST }}
+          SSH_PORT: ${{ secrets.CPANEL_SSH_PORT || '22' }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -p "$SSH_PORT" -H "$SSH_HOST" >> ~/.ssh/known_hosts
+
+      - name: Upload static site
+        env:
+          SSH_HOST: ${{ secrets.CPANEL_HOST }}
+          SSH_USER: ${{ secrets.CPANEL_USER }}
+          SSH_PORT: ${{ secrets.CPANEL_SSH_PORT || '22' }}
+          APP_PATH: ${{ secrets.CPANEL_APP_PATH }}
+        run: |
+          SSH="ssh -i ~/.ssh/deploy_key -p $SSH_PORT"
+          $SSH "$SSH_USER@$SSH_HOST" "mkdir -p '$APP_PATH'"
+          # --delete wipes anything left over from the old Node.js/Passenger
+          # app (app.cjs, packages/, data/, etc.) since it's no longer used.
+          rsync -az --delete -e "$SSH" docs/ "$SSH_USER@$SSH_HOST:$APP_PATH/"
