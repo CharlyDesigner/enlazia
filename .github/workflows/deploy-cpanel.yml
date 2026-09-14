@@ -103,3 +103,18 @@ jobs:
             --exclude 'node_modules' --exclude '*.log' \
             -e "$SSH" release/ "$SSH_USER@$SSH_HOST:$APP_PATH/"
           $SSH "$SSH_USER@$SSH_HOST" "mkdir -p '$APP_PATH/tmp' && touch '$APP_PATH/tmp/restart.txt'"
+
+      - name: Verify what actually landed (no secrets)
+        env:
+          SSH_HOST: ${{ secrets.CPANEL_HOST }}
+          SSH_USER: ${{ secrets.CPANEL_USER }}
+          SSH_PORT: ${{ secrets.CPANEL_SSH_PORT || '22' }}
+          APP_PATH: ${{ secrets.CPANEL_APP_PATH }}
+        run: |
+          SSH="ssh -i ~/.ssh/deploy_key -p $SSH_PORT"
+          echo "--- APP_PATH listing after rsync ---"
+          $SSH "$SSH_USER@$SSH_HOST" "ls -la '$APP_PATH'"
+          echo "--- app.cjs content (not secret: it's just a require()) ---"
+          $SSH "$SSH_USER@$SSH_HOST" "cat '$APP_PATH/app.cjs'"
+          echo "--- restart.txt mtime ---"
+          $SSH "$SSH_USER@$SSH_HOST" "stat -c '%y %n' '$APP_PATH/tmp/restart.txt'"
